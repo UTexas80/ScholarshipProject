@@ -1,0 +1,16 @@
+as_factors: FALSE
+attach_internal_libraries: FALSE
+cache_loading: FALSE
+cache_loaded_data: FALSE
+data_loading: TRUE
+data_loading_header: TRUE
+data_ignore:
+data_tables: TRUE
+load_libraries: TRUE
+libraries: BatchGetSymbols, batchtools, caTools, curl, DataExplorer, data.table, devtools, dplyr, filesstrings, FinancialInstrument, foreach, fTrading, ggplot2, ggthemes, here, igraph, knitr, lubridate, modules, openxlsx, PerformanceAnalytics, plotly, Quandl, quantmod, quantstrat, readxl, reshape, reshape2, rio, rJava, rprojroot, skimr, SIT, SIT.date, stringr, tibble, tidyquant, timetk, TTR, xlsx, zoo
+logging: TRUE
+logging_level: INFO
+munging: TRUE
+recursive_loading: TRUE
+sticky_variables: NONE
+version: 0.8
