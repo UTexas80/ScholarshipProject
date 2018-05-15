@@ -4,9 +4,10 @@ require(stats)
 data_files <- file.info(Sys.glob("y:/Reports/Banner/Argos/Test/*.csv"))
 row.names(data_files)[which.max(data_files[["ctime"]])]                                                         #find the most recent version
 #import .csv file
-tbl.scholar<-read.csv(row.names(data_files)[which.max(data_files[["ctime"]])], header=TRUE, sep=",", colClasses=c("Date", rep("character",2),rep("numeric",10)))
+tbl.scholar<-read.csv(row.names(data_files)[which.max(data_files[["ctime"]])], header=TRUE, sep=",", colClasses=c("Date", rep("character",2),"numeric","character", rep("numeric",8)))
 #tbl.scholar$spriden_id  <- as.character(tbl.scholar$spriden_id)                                                #convert spriden to character
 names(tbl.scholar)[2] <- "studentID"                                                                            #rename to studentID
+names(tbl.scholar)[5] <- "fundCode"                                                                             #rename to studentID
 #tbl.scholar$SYSDATE <- as.Date(as.character(tbl.scholar$SYSDATE), "%m/%d/%Y")                                  #convert SYSDATE to date only
 tbl.scholar[ is.na(tbl.scholar) ] <- 0                                                                          #replace na's with 0
 
@@ -19,6 +20,7 @@ fundCode <- subset(fundCode, fundCode!=0)                                       
 fundCode <- unique(fundCode)                                                                                    #extract the unique values
 fundCode <- setorder(fundCode, fundCode)                                                                        #sort the fundCode column
 fundCode <- fundCode %>% left_join(select(tbl.GaCommitmentFundList.OSFA, fundCode, fundName), by.x = "fundCode")
+fundCode$fundName[is.na(fundCode$fundName)] <- ""                                                               #replace na's with blanks in fund name
 
 #jctCode
 jctCode <- c(tbl.scholarshipCohorts[,4], tbl.scholarshipCohorts[,3])                                            #concatenate jctCode columns
@@ -103,19 +105,29 @@ write.csv(jctCode, "output/jct_Code.csv", row.names=F)
 write.csv(jctCohortCode, "output/jct_CohortCode.csv", row.names=F)
 write.csv(osfaCode, "output/tbl_osfaCode.csv", row.names=F)
 write.csv(studentID, "output/tbl_studentId.csv", row.names=F)
+
 write.csv(tbl.balance, "output/tbl_balance.csv", row.names=F)
 write.csv(tbl.CohortAwd, "output/tbl_CohortAwd.csv", row.names=F)
 write.csv(tbl.fundBalance, "output/tbl_fundBalance.csv", row.names=F)
 write.csv(tbl.GaCommit, "output/tbl_GaCommit.csv", row.names=F)
-#write.csv(tbl.scholar, "output/tbl_scholar.csv", row.names=F)
+write.csv(tbl.scholar, "output/tbl_scholar.csv", row.names=F)
 write.csv(tbl.studentBalance, "output/tbl_studentBalance.csv", row.names=F)
-
 
 write.xlsx(fundCode, "output/tbl_fundCode.xlsx", row.names=F)
 write.xlsx(jctCode, "output/tbl_jctCode.xlsx", row.names=F)
+write.xlsx(jctCohortCode, "output/tbl_jctCohortCode.xlsx", row.names=F)
 write.xlsx(osfaCode, "output/tbl_osfaCode.xlsx", row.names=F)
 write.xlsx(studentID, "output/tbl_studentID.xlsx", row.names=F)
 
+write.xlsx(as.data.frame(tbl.balance), "output/tbl_balance.xlsx", row.names=F)
+write.xlsx(as.data.frame(tbl.BannerCohorts), "output/tbl_BannerCohorts.xlsx", row.names=F)
+write.xlsx(as.data.frame(tbl.CohortAwd), "output/tbl_CohortAwd.xlsx", row.names=F)
+write.xlsx(as.data.frame(tbl.fundBalance), "output/tbl_fundBalance.xlsx", row.names=F)
+write.xlsx(as.data.frame(tbl.GaCommit), "output/tbl_GaCommit.xlsx", row.names=F)
+write.xlsx(as.data.frame(tbl.GaCommitmentFundList.OSFA), "output/tbl_GaCommitFundList.xlsx", row.names=F)
+write.xlsx(tbl.scholar, "output/tbl_scholar.xlsx", row.names=F)
+write.xlsx(as.data.frame(tbl.studentBalance), "output/tbl_studentBalance.xlsx", row.names=F)
+write.xlsx(studentID, "output/tbl_studentID.xlsx", row.names=F)
 
 
 # RegEx

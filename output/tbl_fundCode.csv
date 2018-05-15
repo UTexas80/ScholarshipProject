@@ -1,41 +1,41 @@
 "fundCode","fundName"
-"20402050",NA
-"20402350",NA
-"20402550",NA
-"20418500",NA
-"20419000",NA
-"20419500",NA
-"71135000",NA
-"71159000",NA
-"71675000",NA
-"71688000",NA
-"72119000",NA
-"72137000",NA
-"72219000",NA
-"72323000",NA
-"72328000",NA
-"72365000",NA
-"72417000",NA
-"72418000",NA
-"72435000",NA
-"72514000",NA
-"72538000",NA
-"72572000",NA
-"72600500",NA
-"72662000",NA
-"72681000",NA
-"72692000",NA
-"72713000",NA
-"72787000",NA
-"72869000",NA
-"72873000",NA
-"72926000",NA
-"72936000",NA
-"72978000",NA
-"75002000",NA
-"75058000",NA
-"75088000",NA
-"75127000",NA
+"20402050",""
+"20402350",""
+"20402550",""
+"20418500",""
+"20419000",""
+"20419500",""
+"71135000",""
+"71159000",""
+"71675000",""
+"71688000",""
+"72119000",""
+"72137000",""
+"72219000",""
+"72323000",""
+"72328000",""
+"72365000",""
+"72417000",""
+"72418000",""
+"72435000",""
+"72514000",""
+"72538000",""
+"72572000",""
+"72600500",""
+"72662000",""
+"72681000",""
+"72692000",""
+"72713000",""
+"72787000",""
+"72869000",""
+"72873000",""
+"72926000",""
+"72936000",""
+"72978000",""
+"75002000",""
+"75058000",""
+"75088000",""
+"75127000",""
 "7516000","Sam A. Idelson Scholarship Fund"
 "7518300","Jim and Natalie Childs Georgia Commitment Scholarship Fund I"
 "7519400","Gail and William Oliver (Dr. Pat) Hunnicutt III Scholarship Fund (1)"
@@ -82,7 +82,7 @@
 "7526900","Angela and Arthur M. Blank Scholarship Fund IV"
 "7527000","Angela and Arthur M. Blank Scholarship Fund V"
 "7527100","Howard E. Ivester Scholarship Fund I"
-"75271000",NA
+"75271000",""
 "7527200","Howard E. Ivester Scholarship Fund II"
 "7527300","Douglas Scholarship Fund I"
 "7527400","Douglas Scholarship Fund II"
@@ -91,7 +91,7 @@
 "7527900","Flanagan Family Foundation Scholarship Fund"
 "7528000","John and Marilyn McMullan Scholarship Fund"
 "7528200","Gregory F. Holcomb and Jennifer F. Holcomb Scholarship Fund"
-"75282000",NA
+"75282000",""
 "7528300","Weisiger Family Need-Based Scholarship Fund"
 "7528700","Ada Lee Correll Scholarship Fund"
 "7528800","The Cousins Scholars Program Scholarship Fund 1"
@@ -123,10 +123,10 @@
 "7529300","Eberhardt Family Legacy Scholarship Fund"
 "7529800","Rachel Cosby Conway Scholarship Fund"
 "7529900","Mike and Jayne Godwin Scholarship Fund"
-"75299000",NA
+"75299000",""
 "7530000","Mickey A. and Carolyn F. Brown Endowed Scholarship Fund"
 "7530300","Todd and Darlene Shutley Scholarship Fund"
-"75303000",NA
+"75303000",""
 "7530900","GCS SR17 Fund I (ANONYMOUS)"
 "7531000","Scott and Heather Kleiner Scholarship Fund"
 "7532300","John and Mildred Spalding Scholarship Fund"
@@ -163,22 +163,22 @@
 "7537900","GAA Georgia Commitment Scholarship Fund II"
 "7538000","GAA Georgia Commitment Scholarship Fund III"
 "7538900","GAA Georgia Commitment Scholarship Fund IV"
-"75390000",NA
+"75390000",""
 "7539400","GAA Georgia Commitment Scholarship Fund V"
 "7539800","GAA Georgia Commitment Scholarship Fund VI"
 "7539900","GAA Georgia Commitment Scholarship Fund VII"
 "7540000","GCS SR17 Fund II (ANONYMOUS)"
 "7540100","GCS SR17 Fund III (ANONYMOUS)"
 "7540200","GCS SR17 Fund IV (ANONYMOUS)"
-"75402000",NA
-"75404000",NA
+"75402000",""
+"75404000",""
 "7540500","GCS SR17 Fund V (ANONYMOUS)"
 "7540600","Porter and Magner Lummus Scholarship Fund"
 "7540700","GAA Georgia Commitment Scholarship Fund VIII"
 "7540800","GAA Georgia Commitment Scholarship Fund IX"
 "7540900","GAA Georgia Commitment Scholarship Fund X"
 "7541000","Jim and Natalie Childs Georgia Commitment Scholarship Fund II"
-"75410000",NA
+"75410000",""
 "7541100","Jim and Natalie Childs Georgia Commitment Scholarship Fund III"
 "7541200","Jim and Natalie Childs Georgia Commitment Scholarship Fund IV"
 "7541300","Jim and Natalie Childs Georgia Commitment Scholarship Fund V"
@@ -186,7 +186,7 @@
 "7541600","Jim and Natalie Childs Georgia Commitment Scholarship Fund VII"
 "7541700","Connally Family Scholarship Fund"
 "7541900","Home Depot Alumni Corporate Chapter Scholarship Fund"
-"75421000",NA
+"75421000",""
 "7542200","Tabor-Pearson Scholarship Fund"
 "7542400","Women of UGA Scholarship Endowment"
 "7542600","Stephens Family Scholarship Fund"
@@ -194,9 +194,9 @@
 "7543000","Mary Alice T. and J. Guyton Cochran Jr. Family Scholarship Fund"
 "7543500","Weaver Scholarship Fund"
 "7544500","Emily and Eric Olsen Scholarship Fund"
-"75452000",NA
-"75454000",NA
-"75458000",NA
+"75452000",""
+"75454000",""
+"75458000",""
 "7546700","Quenelle Harrold Sheffield Scholarship Fund"
 "7547400","Howard E. Ivester Scholarship Fund III"
 "7548000","Howard E. Ivester Scholarship Fund IV"
@@ -318,29 +318,29 @@
 "7560100","Georgia Commitment Continuation Scholarship Fund (1)"
 "7560100","Georgia Commitment Continuation Scholarship Fund (2)"
 "7560200","Baker Charitable Scholarship Fund"
-"78143000",NA
-"81376000",NA
-"84400000",NA
-"89600000",NA
-"91407000",NA
-"91438000",NA
-"91473000",NA
-"91490000",NA
-"91764000",NA
-"91932000",NA
-"91966000",NA
-"92007000",NA
-"92013000",NA
-"92018000",NA
-"92026000",NA
-"92041000",NA
-"92046000",NA
-"92050000",NA
-"92053000",NA
-"92056000",NA
-"92059000",NA
-"92065000",NA
-"92067000",NA
-"92798000",NA
-"94001400",NA
-"98140000",NA
+"78143000",""
+"81376000",""
+"84400000",""
+"89600000",""
+"91407000",""
+"91438000",""
+"91473000",""
+"91490000",""
+"91764000",""
+"91932000",""
+"91966000",""
+"92007000",""
+"92013000",""
+"92018000",""
+"92026000",""
+"92041000",""
+"92046000",""
+"92050000",""
+"92053000",""
+"92056000",""
+"92059000",""
+"92065000",""
+"92067000",""
+"92798000",""
+"94001400",""
+"98140000",""
