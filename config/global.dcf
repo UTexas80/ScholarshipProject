@@ -7,7 +7,7 @@ data_loading_header: TRUE
 data_ignore:
 data_tables: TRUE
 load_libraries: TRUE
-libraries: BatchGetSymbols, batchtools, caTools, chron, curl, DataExplorer, data.table, devtools, dplyr, filesstrings, FinancialInstrument, foreach, fTrading, ggfortify, ggplot2, ggthemr, ggthemes, here, igraph, knitr, lintr, lubridate, modules, openxlsx, PerformanceAnalytics, plotly, Quandl, quantmod, quantstrat, readxl, reshape, reshape2, rio, rJava, rprojroot, shiny, shinydashboard, skimr, SIT, SIT.date, stringr, styler,  tibble, tidyquant, timetk, TTR, xlsx, zoo
+libraries: BatchGetSymbols, batchtools, caTools, chron, curl, DataExplorer, data.table, devtools, dplyr, filesstrings, FinancialInstrument, foreach, fTrading, ggfortify, ggplot2, ggplotify, ggthemr, ggthemes, here, igraph, knitr, lintr, lubridate, modules, openxlsx, PerformanceAnalytics, plotly, Quandl, quantmod, quantstrat, readxl, reshape, reshape2, rio, rJava, rprojroot, shiny, shinydashboard, skimr, SIT, SIT.date, stringr, styler,  tibble, tidyquant, timetk, treemapify, TTR, xlsx, zoo
 logging: TRUE
 logging_level: INFO
 munging: TRUE

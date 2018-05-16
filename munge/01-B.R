@@ -61,7 +61,10 @@ studentID <- setorder(studentID, studentID)                                     
 #Join three Tables - use `nomatch` argument-> i.e., nomatch-0
 tbl.CohortAwd<-tbl.BannerCohorts[tbl.scholarshipAwd,nomatch=0,on=c("studentID", "osfaCode")][tbl.scholarshipCohorts,nomatch=0,on=c("studentID", "osfaCode")]
 # tbl.CohortAwd<-tbl.BannerCohorts[tbl.scholarshipAwd, nomatch=0, on=c("studentID", "osfaCode")]                #Join Banner Cohorts + scholarshipAwd tables
-tbl.CohortAwd$Award <- as.numeric(as.character(tbl.CohortAwd$Award))                                            #covert CohortAwd$Award from character to numeric
+tbl.CohortAwd <- tbl.CohortAwd %>%
+    mutate_all(funs(replace(., is.na(.), 0)))                                                                   #20180516b
+as.numeric(as.character(tbl.CohortAwd$Award))                                                                   #covert CohortAwd$Award from character to numeric
+
 
 tbl.CohortAwdByFY <- data.table(tbl.CohortAwd)[,.(FY, Award)]
 tbl.CohortAwdByFY[,meanAwdByFY:=mean(Award), by=FY]
@@ -100,8 +103,8 @@ tbl.studentBalance<-tbl.BannerCohorts %>%
 tbl.balance<- inner_join(tbl.fundBalance, tbl.studentBalance, by = "osfaCode")
 
 #write output .csv files
-write.csv(fundCode, "output/tbl_fundCode.csv", row.names=F)
 write.csv(jctCode, "output/jct_Code.csv", row.names=F)
+write.csv(fundCode, "output/tbl_fundCode.csv", row.names=F)
 write.csv(jctCohortCode, "output/jct_CohortCode.csv", row.names=F)
 write.csv(osfaCode, "output/tbl_osfaCode.csv", row.names=F)
 write.csv(studentID, "output/tbl_studentId.csv", row.names=F)
@@ -114,20 +117,34 @@ write.csv(tbl.scholar, "output/tbl_scholar.csv", row.names=F)
 write.csv(tbl.studentBalance, "output/tbl_studentBalance.csv", row.names=F)
 
 #write output .xlsx files
-write.xlsx(fundCode, "output/tbl_fundCode.xlsx", row.names=F, sheetName="tblFundCode", append=FALSE)
-write.xlsx(jctCode, "output/tbl_jctCode.xlsx", row.names=F, sheetName="tbl_jctCode")
-write.xlsx(jctCohortCode, "output/tbl_jctCohortCode.xlsx", row.names=F, sheetName="tbl_jctCohortCode")
-write.xlsx(osfaCode, "output/tbl_osfaCode.xlsx", row.names=F, sheetName="tbl_osfaCode")
-write.xlsx(studentID, "output/tbl_studentID.xlsx", row.names=F, sheetName="tbl_studentID")
+# write.xlsx(fundCode, "output/tbl_fundCode.xlsx", row.names=F, sheetName="tblFundCode", append=FALSE)
+# write.xlsx(jctCode, "output/tbl_jctCode.xlsx", row.names=F, sheetName="tbl_jctCode")
+# write.xlsx(jctCohortCode, "output/tbl_jctCohortCode.xlsx", row.names=F, sheetName="tbl_jctCohortCode")
+# write.xlsx(osfaCode, "output/tbl_osfaCode.xlsx", row.names=F, sheetName="tbl_osfaCode")
+# write.xlsx(studentID, "output/tbl_studentID.xlsx", row.names=F, sheetName="tbl_studentID")
 
-write.xlsx(as.data.frame(tbl.balance), "output/tbl_balance.xlsx", row.names=F, sheetName="tbl_balance")
-write.xlsx(as.data.frame(tbl.BannerCohorts), "output/tbl_bannerCohorts.xlsx", row.names=F, sheetName="tbl_bannerCohorts")
-write.xlsx(as.data.frame(tbl.CohortAwd), "output/tbl_cohortAwd.xlsx", row.names=F, sheetName="tbl_cohortAwd")
-write.xlsx(as.data.frame(tbl.fundBalance), "output/tbl_fundBalance.xlsx", row.names=F, sheetName="tbl_fundBalance")
-write.xlsx(as.data.frame(tbl.GaCommit), "output/tbl_GaCommit.xlsx", row.names=F, sheetName="tbl_GaCommit")
-write.xlsx(as.data.frame(tbl.GaCommitmentFundList.OSFA), "output/tbl_GaCommitFundList.xlsx", row.names=F, sheetName="tbl_GaCommitFundList")
-write.xlsx(tbl.scholar, "output/tbl_scholar.xlsx", row.names=F, sheetName="tbl_scholar")
-write.xlsx(as.data.frame(tbl.studentBalance), "output/tbl_studentBalance.xlsx", row.names=F, sheetName="tbl_studentBalance")
+# write.xlsx(as.data.frame(tbl.balance), "output/tbl_balance.xlsx", row.names=F, sheetName="tbl_balance")
+# write.xlsx(as.data.frame(tbl.BannerCohorts), "output/tbl_bannerCohorts.xlsx", row.names=F, sheetName="tbl_bannerCohorts")
+# write.xlsx(as.data.frame(tbl.CohortAwd), "output/tbl_cohortAwd.xlsx", row.names=F, sheetName="tbl_cohortAwd")
+# write.xlsx(as.data.frame(tbl.fundBalance), "output/tbl_fundBalance.xlsx", row.names=F, sheetName="tbl_fundBalance")
+# write.xlsx(as.data.frame(tbl.GaCommit), "output/tbl_GaCommit.xlsx", row.names=F, sheetName="tbl_GaCommit")
+# write.xlsx(as.data.frame(tbl.GaCommitmentFundList.OSFA), "output/tbl_GaCommitFundList.xlsx", row.names=F, sheetName="tbl_GaCommitFundList")
+# write.xlsx(tbl.scholar, "output/tbl_scholar.xlsx", row.names=F, sheetName="tbl_scholar")
+# write.xlsx(as.data.frame(tbl.studentBalance), "output/tbl_studentBalance.xlsx", row.names=F, sheetName="tbl_studentBalance")
+
+write.xlsx(jctCode, "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_jctCode", append=FALSE)
+write.xlsx(fundCode, "output/tbl_scholarships.xlsx", row.names=F, sheetName="tblFundCode", append=TRUE)
+write.xlsx(jctCohortCode, "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_jctCohortCode", append=TRUE)
+write.xlsx(osfaCode, "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_osfaCode", append=TRUE)
+write.xlsx(studentID, "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_studentID", append=TRUE)
+write.xlsx(tbl.scholar, "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_scholar", append=TRUE)
+write.xlsx(as.data.frame(tbl.balance), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_balance", append=TRUE)
+write.xlsx(as.data.frame(tbl.BannerCohorts), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_bannerCohorts", append=TRUE)
+write.xlsx(as.data.frame(tbl.CohortAwd), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_cohortAwd", append=TRUE)
+write.xlsx(as.data.frame(tbl.fundBalance), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_fundBalance", append=TRUE)
+write.xlsx(as.data.frame(tbl.GaCommit), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_GaCommit", append=TRUE)
+write.xlsx(as.data.frame(tbl.GaCommitmentFundList.OSFA), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_GaCommitFundList", append=TRUE)
+write.xlsx(as.data.frame(tbl.studentBalance), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_studentBalance", append=TRUE)
 
 
 # RegEx
