@@ -17,4 +17,5 @@ tbl.scholarshipCohorts$fundCode         <- as.character(tbl.scholarshipCohorts$f
 tbl.scholarshipCohorts$osfaCode         <- as.character(tbl.scholarshipCohorts$osfaCode)
 tbl.scholarshipCohorts$studentID        <- as.character(tbl.scholarshipCohorts$studentID)
 
+tbl.studentID <- tbl.studentID[!apply(is.na(tbl.studentID) | tbl.studentID == "", 1, all),]                                                 # 20180516b remove both (NAs and empty):
 tbl.studentID$studentID                 <- as.character(tbl.studentID$studentID)
