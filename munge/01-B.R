@@ -11,6 +11,12 @@ names(tbl.scholar)[5] <- "fundCode"                                             
 #tbl.scholar$SYSDATE <- as.Date(as.character(tbl.scholar$SYSDATE), "%m/%d/%Y")                                  #convert SYSDATE to date only
 tbl.scholar[ is.na(tbl.scholar) ] <- 0                                                                          #replace na's with 0
 
+# dup.DF(tbl.scholar, "cohort")
+
+tbl.scholar1 <- tbl.scholar
+tbl.scholar1<-tbl.scholar1%>%mutate_cond(cohort == currentAY, ay_1819=ay_1718, ay_1920=ay_1718, ay_2021=ay_1718)
+tbl.scholar1<-tbl.scholar1%>%mutate_cond(cohort == currentAY+101, ay_1920=ay_1819, ay_2021=ay_1819, ay_2122=ay_1819)
+dup.DF(tbl.scholar1, currentAY, 4)
 #funcCode
 fundCode <- c(tbl.Cancels[,9], tbl.scholarshipAwd[,4], tbl.scholarshipCohorts[,4], tbl.GaCommitmentFundList.OSFA[,3])   #concatenate fundCode columns
 fundCode <- stack(fundCode)                                                                                     #stack columns on top of each other
