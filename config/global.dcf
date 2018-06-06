@@ -9,7 +9,7 @@ data_tables: TRUE
 load_libraries: TRUE
 libraries: caTools, chron, curl, DataExplorer, data.table, devtools, dplyr, filesstrings,
              foreach, ggfortify, ggplot2, ggplotify, ggthemes, here, igraph, knitr, lintr,
-             lubridate, modules, openxlsx, readxl, reshape, reshape2, rio, rJava,  
+             lubridate, modules, openxlsx, RDCOMClient, readxl, reshape, reshape2, rio, rJava,  
              rprojroot, skimr, stringr, styler, taRifx, tibble, timetk, xlsx, zoo
 logging: TRUE
 logging_level: INFO

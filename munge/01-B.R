@@ -13,10 +13,13 @@ tbl.scholar[ is.na(tbl.scholar) ] <- 0                                          
 
 # dup.DF(tbl.scholar, "cohort")
 
+colNames <- c("ay_2223", "ay_2324")
+
 tbl.scholar1 <- tbl.scholar
 tbl.scholar1<-tbl.scholar1%>%mutate_cond(cohort == currentAY, ay_1819=ay_1718, ay_1920=ay_1718, ay_2021=ay_1718)
 tbl.scholar1<-tbl.scholar1%>%mutate_cond(cohort == currentAY+101, ay_1920=ay_1819, ay_2021=ay_1819, ay_2122=ay_1819)
-dup.DF(tbl.scholar1, currentAY, 4)
+tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", "ay_2324")
+
 #funcCode
 fundCode <- c(tbl.Cancels[,9], tbl.scholarshipAwd[,4], tbl.scholarshipCohorts[,4], tbl.GaCommitmentFundList.OSFA[,3])   #concatenate fundCode columns
 fundCode <- stack(fundCode)                                                                                     #stack columns on top of each other
@@ -152,6 +155,8 @@ write.xlsx(as.data.frame(tbl.GaCommit), "output/tbl_scholarships.xlsx", row.name
 write.xlsx(as.data.frame(tbl.GaCommitmentFundList.OSFA), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_GaCommitFundList", append=TRUE)
 write.xlsx(as.data.frame(tbl.studentBalance), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_studentBalance", append=TRUE)
 
+write.xlsx(tbl.scholar, "output/tbl_scholar.xlsx", row.names=F, sheetName="tbl_scholar", append=FALSE)
+write.xlsx(tbl.scholar1, "output/tbl_scholar1.xlsx", row.names=F, sheetName="tbl_scholar1", append=FALSE)
 
 # RegEx
 # ([\sI])\w+

@@ -31,12 +31,34 @@ mutate_cond <- function(.data, condition, ..., new_init = NA, envir = parent.fra
    data[, col]
  }
 
-dup.DF <- function(df1, currAY, colIdx) {
-  #colnames(df1[colIdx])
-  #print(currAY)
+dup.DF <- function(df1, currAY, colIdx, name1,name2) {
+  # print(colnames(df1[colIdx]))
+  # print(currAY)
+  # print(name1)
+  # print(name2)
+  
+#  name1 <- quo(name1)
+#  name2 <- quo(name2)
+  
+#  print(name1)
+#  print(name2)
+  
+#  expr1 <- enquo(name1)
+#  expr2 <- quo(name2)
+
+#  expr1 <- substitute(name1)
+#  expr2 <- substitute(name2)
+
+#  print (expr1)
+#  print (expr2)
+  # name2 <- enquo(name2)  
+  #print(name2)
+  # name1 <-quo(name1)
+#  name1 <- quo(name1)
 #  df1%>%mutate_cond(cohort == currAY, ay_2223=ay_1718)
-  df1%>%mutate_cond(colnames(df1[colIdx]) == currAY, ay_2223=ay_1718)                               
-  df1%>%mutate_cond(cohort == currAY, ay_2324=ay_1718)                                              #This works
-# -df1[, col]
+#  df1%>%mutate_cond(colnames(df1[colIdx]) == currAY, ay_2223=ay_1718)                               
+#  df1%>%mutate_cond(cohort == currAY, ay_2324 =!! name1)                                           #This works
+  df1%>%mutate_cond(cohort == currAY, UQ(rlang::sym(name2)) :=  UQ(rlang::sym(name1)))              #This works!!!!
+# -df1[, col]0
 #  tbl.scholar1<-tbl.scholar1%>%mutate_cond(cohort == currentAY, ay_1819=ay_1718, ay_1920=ay_1718, ay_2021=ay_1718)
 }
