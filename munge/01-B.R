@@ -1,10 +1,11 @@
 # Example preprocessing script.
-require(stats)
+# require(stats)
 
-data_files <- file.info(Sys.glob("y:/Reports/Banner/Argos/Test/*.csv"))
-row.names(data_files)[which.max(data_files[["ctime"]])]                                                         #find the most recent version
+#https://stackoverflow.com/questions/49016063/how-to-import-most-recent-csv-file-into-rstudio
+data_files <- file.info(Sys.glob("y:/Reports/Banner/Argos/Test/*.csv"))                                                                     
+tbl.scholar<-read.csv(row.names(data_files)[which.max(data_files[["ctime"]])])                                                               #find the most recent version
 #import .csv file
-tbl.scholar<-read.csv(row.names(data_files)[which.max(data_files[["ctime"]])], header=TRUE, sep=",", colClasses=c("Date", rep("character",2),"numeric","character", rep("numeric",8)))
+#tbl.scholar<-read.csv(row.names(data_files)[which.max(data_files[["ctime"]])], header=TRUE, sep=",", colClasses=c("Date", rep("character",2),"numeric","character", rep("numeric",8)))
 #tbl.scholar$spriden_id  <- as.character(tbl.scholar$spriden_id)                                                #convert spriden to character
 names(tbl.scholar)[2] <- "studentID"                                                                            #rename to studentID
 names(tbl.scholar)[5] <- "fundCode"                                                                             #rename to studentID
@@ -14,15 +15,40 @@ tbl.scholar[ is.na(tbl.scholar) ] <- 0                                          
 # dup.DF(tbl.scholar, "cohort")
 
 colNames <- c("ay_2223", "ay_2324")
+#colNames <- list("ay_2223", "ay_2324")
+#colNames <- paste0("ay_", c(ay$V1))
+# z<-head(paste0("ay_", c(ay$V1)),4)
+a<-as.character(rep(head(ay$V1,1),4))
+b<-head(paste0("ay_", ay$V2),4)
 
 tbl.scholar1 <- tbl.scholar
-tbl.scholar1<-tbl.scholar1%>%mutate_cond(cohort == currentAY, ay_1819=ay_1718, ay_1920=ay_1718, ay_2021=ay_1718)
-tbl.scholar1<-tbl.scholar1%>%mutate_cond(cohort == currentAY+101, ay_1920=ay_1819, ay_2021=ay_1819, ay_2122=ay_1819)
-tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", "ay_2324")
+tbl.scholar1<-tbl.scholar1%>%mutate_cond(COHORT == currentAY, AY_1819=AY_1718, AY_1920=AY_1718, AY_2021=AY_1718)
+tbl.scholar1<-tbl.scholar1%>%mutate_cond(COHORT == currentAY+101, AY_1920=AY_1819, AY_2021=AY_1819, AY_2122=AY_1819)
+#tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", "ay_2324")
+#tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", "ay_2324")
+#tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", colNames)                              #20180606b
+
+#Dynamic Approach to propagate scholarship amount to the ensuing three years ####
+st_pos <- 6                                                                                         #concerned column's start position in the given dataframe
+df <- tbl.scholar                                                                                   #data backup
+
+#rename concerned columns as "ay_1718", "ay_1819" etc
+names(df)[st_pos:ncol(df)] <- paste("AY", paste0(as.numeric(substr(min(df$cohort), 1, 2)) + 0:(ncol(df) - st_pos),
+                                                 as.numeric(substr(min(df$cohort), 3, 4)) + 0:(ncol(df) - st_pos)), 
+                                    sep="_")
+
+#copy "year" column's value to the ensuing three columns
+cols <- names(df)[st_pos:ncol(df)]                                                                  #renamed columns
+mapply(function(x, y) 
+  df[df$COHORT == x & df$studentID == y, which(grepl(x, cols)) + (st_pos-1):(st_pos+2)] <<- 
+    df[df$COHORT == x & df$studentID == y, which(grepl(x, cols)) + (st_pos-1)],
+  df$COHORT, df$studentID)
+
+#End of Dynamic Approach ####
 
 #funcCode
 fundCode <- c(tbl.Cancels[,9], tbl.scholarshipAwd[,4], tbl.scholarshipCohorts[,4], tbl.GaCommitmentFundList.OSFA[,3])   #concatenate fundCode columns
-fundCode <- stack(fundCode)                                                                                     #stack columns on top of each other
+fundCode <- melt(fundCode)                                                                                     #stack columns on top of each other
 fundCode <- fundCode[,1]                                                                                        #extract the first column only
 fundCode <- as.data.table(fundCode)                                                                             #convert to a data.table
 fundCode <- subset(fundCode, fundCode!=0)                                                                       #remove rows containing zero
@@ -50,7 +76,7 @@ jctCohortCode <- setorder(jctCohortCode, studentID)                             
 
 #osfaCode
 osfaCode <- c(tbl.BannerCohorts[,5], tbl.scholarshipAwd[,3], tbl.scholarshipCohorts[,3])                        #concatenate fundCode columns
-osfaCode <- stack(osfaCode)                                                                                     #stack columns on top of each other
+osfaCode <- melt(osfaCode)                                                                                     #stack columns on top of each other
 osfaCode <- osfaCode[,1]                                                                                        #extract the first column only
 names(osfaCode) <- c("osfaCode")                                                                                #rename columns
 osfaCode <- as.data.table(osfaCode)                                                                             #convert to a data.table
@@ -58,13 +84,14 @@ osfaCode <- subset(osfaCode, osfaCode!=0)                                       
 osfaCode <- unique(osfaCode)                                                                                    #extract the unique values
 osfaCode <- setorder(osfaCode, osfaCode)                                                                        #sort the osfaCode column
 
-#osfaCode
+#studentID
 studentID <- c(tbl.BannerCohorts[,2], tbl.Cancels[,5], tbl.scholarshipAwd[,5], tbl.scholarshipCohorts[,11])     #concatenate studentID columns
-studentID <- stack(studentID)                                                                                   #stack columns on top of each other
+studentID <- melt(studentID)                                                                                   #stack columns on top of each other
 studentID <- studentID[,1]                                                                                      #extract the first column only
 studentID <- as.data.table(studentID)                                                                           #convert to a data.table
-studentID <- subset(studentID, studentID!=0)                                                                    #remove rows containing zero
+studentID <- subset(studentID, studentID!=0 & studentID!="")                                                                    #remove rows containing zero
 studentID <- unique(studentID)                                                                                  #extract the unique values
+#studentID <- studentID[!apply(is.na(studentID) | studentID == "", 1, all),]                                             #remove rows containing blanks & na's
 studentID <- setorder(studentID, studentID)                                                                     #sort the studentID column
 
 #Join three Tables - use `nomatch` argument-> i.e., nomatch-0
@@ -97,7 +124,7 @@ tbl.fundBalance<-tbl.GaCommitmentFundList.OSFA %>%
     mutate(totBalFund = incBal+principleBal+invBal) %>% 
     arrange(fundCode, fundName)
 
-tbl.fundBalance<-inner_join(tbl.fundBalance, jctCode)
+#tbl.fundBalance<-inner_join(tbl.fundBalance, jctCode)
 
 tbl.BannerCohorts[ is.na(tbl.BannerCohorts) ] <- 0
 tbl.BannerCohorts %>% 
@@ -109,7 +136,19 @@ tbl.studentBalance<-tbl.BannerCohorts %>%
     summarize(totBalStudent=sum(AY_1718, AY_1819, AY_1920, AY_2021, AY_2122, AY_2223, AY_2324, AY_2425)) %>%
     arrange(osfaCode)
 
-tbl.balance<- inner_join(tbl.fundBalance, tbl.studentBalance, by = "osfaCode")
+#tbl.balance<- inner_join(tbl.fundBalance, tbl.studentBalance, by = "osfaCode")
+
+# Totals preprocessing script.
+tbl.fundSummary<-as.data.table(unique.data.frame(select(select(inner_join(tbl.fundBalance,jctCode, by='fundCode')%>%inner_join(., tbl.studentBalance, by='osfaCode'), -ends_with(".y")),osfaCode, fundCode:totBalFund, totBalStudent)%>%mutate(totBalRemain = totBalFund - totBalStudent)))
+
+
+#convert tables to data.tables
+fundCode<-data.table(fundCode)
+jctCode<-data.table(jctCode)
+tbl.CohortAwd<-data.table(tbl.CohortAwd)
+tbl.fundBalance<-data.table(tbl.fundBalance)
+tbl.GaCommit<-data.table(tbl.GaCommit)
+
 
 #write output .csv files
 write.csv(jctCode, "output/jct_Code.csv", row.names=F)
@@ -118,7 +157,7 @@ write.csv(jctCohortCode, "output/jct_CohortCode.csv", row.names=F)
 write.csv(osfaCode, "output/tbl_osfaCode.csv", row.names=F)
 write.csv(studentID, "output/tbl_studentId.csv", row.names=F)
 
-write.csv(tbl.balance, "output/tbl_balance.csv", row.names=F)
+#write.csv(tbl.balance, "output/tbl_balance.csv", row.names=F)
 write.csv(tbl.CohortAwd, "output/tbl_CohortAwd.csv", row.names=F)
 write.csv(tbl.fundBalance, "output/tbl_fundBalance.csv", row.names=F)
 write.csv(tbl.GaCommit, "output/tbl_GaCommit.csv", row.names=F)
@@ -147,16 +186,18 @@ write.xlsx(jctCohortCode, "output/tbl_scholarships.xlsx", row.names=F, sheetName
 write.xlsx(osfaCode, "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_osfaCode", append=TRUE)
 write.xlsx(studentID, "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_studentID", append=TRUE)
 write.xlsx(tbl.scholar, "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_scholar", append=TRUE)
-write.xlsx(as.data.frame(tbl.balance), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_balance", append=TRUE)
+#write.xlsx(as.data.frame(tbl.balance), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_balance", append=TRUE)
 write.xlsx(as.data.frame(tbl.BannerCohorts), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_bannerCohorts", append=TRUE)
 write.xlsx(as.data.frame(tbl.CohortAwd), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_cohortAwd", append=TRUE)
 write.xlsx(as.data.frame(tbl.fundBalance), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_fundBalance", append=TRUE)
 write.xlsx(as.data.frame(tbl.GaCommit), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_GaCommit", append=TRUE)
 write.xlsx(as.data.frame(tbl.GaCommitmentFundList.OSFA), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_GaCommitFundList", append=TRUE)
 write.xlsx(as.data.frame(tbl.studentBalance), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_studentBalance", append=TRUE)
+write.xlsx(as.data.frame(tbl.fundSummary), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl.fundSummary", append=TRUE)
 
 write.xlsx(tbl.scholar, "output/tbl_scholar.xlsx", row.names=F, sheetName="tbl_scholar", append=FALSE)
 write.xlsx(tbl.scholar1, "output/tbl_scholar1.xlsx", row.names=F, sheetName="tbl_scholar1", append=FALSE)
+write.xlsx(df, "output/tbl_scholar2.xlsx", row.names=F, sheetName="tbl_scholar2", append=FALSE)
 
 # RegEx
 # ([\sI])\w+

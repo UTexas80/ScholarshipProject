@@ -1,3 +1,72 @@
+st_pos <- 6                         #concerned column's start position in the given dataframe
+df_bkp <- df                        #data backup
+
+#rename concerned columns as "ay_1718", "ay_1819" etc
+names(df)[st_pos:ncol(df)] <- paste("ay", paste0(as.numeric(substr(min(df$cohort), 1, 2)) + 0:(ncol(df) - st_pos),
+                                                 as.numeric(substr(min(df$cohort), 3, 4)) + 0:(ncol(df) - st_pos)), 
+                                    sep="_")
+
+#copy "year" column's value to the ensuing three columns
+cols <- names(df)[st_pos:ncol(df)]  #renamed columns
+mapply(function(x, y) 
+  df[df$cohort == x & df$studentID == y, which(grepl(x, cols)) + (st_pos-1):(st_pos+2)] <<- 
+    df[df$cohort == x & df$studentID == y, which(grepl(x, cols)) + (st_pos-1)],
+  df$cohort, df$studentID)
+
+
+
+packrat::unbundle(bundle = "c:/users/gfalk/OneDrive/R_Performance.3.3.0/R_Performance.3.3..tar.gz", where="c:/users/gfalk")
+packrat::unbundle(bundle = "C:/Users/gfalk/Downloads/R_Performance.3.3.0-2018-05-03.tar", where="C:/Users/gfalk/R_Performance.3.3.0/")
+
+
+sapply(tbl.scholar2, data.table::uniqueN)
+unique(tbl.scholar2[,4])
+length(unique(tbl.scholar2[,4]))
+tbl.scholar2[c(4,6)]
+which(ay$V1 == currentAY)                                                                           # get the row name/number/index
+tbl.scholar2[,which(ay$V1 == currentAY)]                                                            # select data.table column dynamically by index number
+
+a<-as.character(rep(head(ay$V1,1),4))
+b<-head(paste0("ay_", ay$V2),4)
+tbl.scholar2[which(ay$V1 == currentAY)+6]
+tbl.scholar2<-dup.DF(tbl.scholar2, currentAY, 4, "ay_1718", "ay_2324")
+
+c<-paste0("ay_",ay[[which(ay$V1 == currentAY),which(ay$V1 == currentAY)]])
+
+df %>%
+  rowwise() %>%
+  mutate(cohort_plus3 = paste(paste("AY", 
+                                    paste0(as.numeric(substr(cohort, 1, 2)) + 0:3, 
+                                           as.numeric(substr(cohort, 3, 4)) + 0:3), sep = "_"), 
+                              collapse = ",")) %>%
+  separate_rows("cohort_plus3", sep = ",") %>%
+  mutate(flag = 1) %>%
+  spread(cohort_plus3, flag, fill = 0) %>%
+  data.frame()
+
+
+tbl.scholar2 %>%
+    rowwise() %>%
+    mutate(cohort_plus3 = paste(paste("AY", 
+                                      paste0(as.numeric(substr(cohort, 1, 2)) + 0:3, 
+                                             as.numeric(substr(cohort, 3, 4)) + 0:3), sep = "_"), 
+                                collapse = ",")) %>%
+    separate_rows("cohort_plus3", sep = ",") %>%
+    mutate(flag = 1) %>%
+    spread(cohort_plus3, flag, fill = 0) %>%
+    data.frame()
+
+
+
+cohort_plus3 <- paste(paste("AY", 
+                           paste0(as.numeric(substr(tbl.scholar2$cohort, 1, 2)) + 0:3, 
+                                  as.numeric(substr(tbl.scholar2$cohort, 3, 4)) + 0:3), sep = "_"), 
+                     collapse = ",")
+
+
+
+
+
 fundBalance<-tbl.GaCommitmentFundList.OSFA %>% 
     group_by(fundCode, fundName) %>%
     select(fundCode, fundName, incomeBalance, principleBalance, invested.Balance) %>%

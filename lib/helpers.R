@@ -13,7 +13,16 @@ quandl_get <- function(sym, start_date = "2017-01-01") {
     ))
 }
 
-
+#https://stackoverflow.com/questions/6081439/changing-column-names-of-a-data-frame/34202613#34202613
+rename.columns=function(df,changelist){
+  #renames columns of a dataframe
+  for(i in 1:length(names(df))){
+    if(length(changelist[[names(df)[i]]])>0){
+      names(df)[i]= changelist[[names(df)[i]]]
+    }
+  }
+  df
+}
 
 # https://stackoverflow.com/questions/34096162/dplyr-mutate-replace-on-a-subset-of-rows/34096422
 mutate_cond <- function(.data, condition, ..., new_init = NA, envir = parent.frame()) {
@@ -27,12 +36,25 @@ mutate_cond <- function(.data, condition, ..., new_init = NA, envir = parent.fra
   .data
 }
 
- my.function <- function(data, col){
+my.function <- function(data, col){
    data[, col]
  }
 
+my.otherFun <- function(dt ) {
+  dt %>% filter(cohort == "water")
+
+}
+
+f <- function(dt, ...) {                                                                            #function to select columns
+  dt %>% filter(cohort == currentAY) %>% select(...) %>% mutate_at(vars(1:2), funs(change))
+}
+
+
+
 dup.DF <- function(df1, currAY, colIdx, name1,name2) {
-  # print(colnames(df1[colIdx]))
+
+  df1%>%mutate_cond(cohort == currAY, UQ(rlang::sym(name2)) :=  UQ(rlang::sym(name1)))              #This works!!!!  
+  print(colnames(df1[colIdx]))
   # print(currAY)
   # print(name1)
   # print(name2)
@@ -58,7 +80,15 @@ dup.DF <- function(df1, currAY, colIdx, name1,name2) {
 #  df1%>%mutate_cond(cohort == currAY, ay_2223=ay_1718)
 #  df1%>%mutate_cond(colnames(df1[colIdx]) == currAY, ay_2223=ay_1718)                               
 #  df1%>%mutate_cond(cohort == currAY, ay_2324 =!! name1)                                           #This works
-  df1%>%mutate_cond(cohort == currAY, UQ(rlang::sym(name2)) :=  UQ(rlang::sym(name1)))              #This works!!!!
+
 # -df1[, col]0
 #  tbl.scholar1<-tbl.scholar1%>%mutate_cond(cohort == currentAY, ay_1819=ay_1718, ay_1920=ay_1718, ay_2021=ay_1718)
 }
+# https://www.r-bloggers.com/a-quick-way-to-do-row-repeat-and-col-repeat-rep-row-rep-col/ ####
+rep.row<-function(x,n){
+   matrix(rep(x,each=n),nrow=n)
+}
+rep.col<-function(x,n){
+   matrix(rep(x,each=n), ncol=n, byrow=TRUE)
+}
+ 
