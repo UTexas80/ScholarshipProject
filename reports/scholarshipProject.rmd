@@ -1,0 +1,8 @@
+`r opts_knit$set(root.dir='..')`
+
+---
+title: "Scholarship Project"
+author: "Glen C. Falk
+date: "June 21, 2018"
+output: html_document
+---

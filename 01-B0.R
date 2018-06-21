@@ -14,26 +14,25 @@ tbl.scholar[ is.na(tbl.scholar) ] <- 0                                          
 
 # dup.DF(tbl.scholar, "cohort")
 
-colNames <- c("ay_2223", "ay_2324")
-#colNames <- list("ay_2223", "ay_2324")
-#colNames <- paste0("ay_", c(ay$V1))
-# z<-head(paste0("ay_", c(ay$V1)),4)
+colNames <- c("AY_2223", "AY_2324")
+#colNames <- list("AY_2223", "AY_2324")
+#colNames <- paste0("AY_", c(ay$V1))
+# z<-head(paste0("AY_", c(ay$V1)),4)
 a<-as.character(rep(head(ay$V1,1),4))
-b<-head(paste0("ay_", ay$V2),4)
+b<-head(paste0("AY_", ay$V2),4)
 
 tbl.scholar1 <- tbl.scholar
-tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("COHORT", ignore_case = TRUE) == currentAY, ay_1819=ay_1718, ay_1920=ay_1718, ay_2021=ay_1718)
-tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("COHORT", ignore_case = TRUE) == currentAY+101, ay_1920=ay_1819, ay_2021=ay_1819, ay_2122=ay_1819)
-#tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", "ay_2324")
-#tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", "ay_2324")
-#tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", colNames)                              #20180606b
+tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("COHORT", ignore_case = TRUE) == currentAY, AY_1819=AY_1718, AY_1920=AY_1718, AY_2021=AY_1718)
+tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("COHORT", ignore_case = TRUE) == currentAY+101, AY_1920=AY_1819, AY_2021=AY_1819, AY_2122=AY_1819)
+#tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "AY_1718", "AY_2324")
+#tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "AY_1718", "AY_2324")
+#tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "AY_1718", colNames)                              #20180606b
 
 #Dynamic Approach to propagate scholarship amount to the ensuing three years ####
 st_pos <- 6                                                                                         #concerned column's start position in the given dataframe
 df <- tbl.scholar                                                                                   #data backup
-tolower(names(df))                                                                            #change column names to lower case since don't know how input will be formatted
-
-#rename concerned columns as "ay_1718", "ay_1819" etc
+df <- tolower(names(df))                                                                            #change column names to lower case since don't know how input will be formatted
+#rename concerned columns as "AY_1718", "AY_1819" etc
 names(df)[st_pos:ncol(df)] <- paste("AY", paste0(as.numeric(substr(min(df$cohort), 1, 2)) + 0:(ncol(df) - st_pos),
                                                  as.numeric(substr(min(df$cohort), 3, 4)) + 0:(ncol(df) - st_pos)), 
                                     sep="_")
@@ -48,7 +47,7 @@ mapply(function(x, y)
 #End of Dynamic Approach ####
 
 #funcCode
-fundCode <- c(tbl.Cancels[,9], tbl.scholarshipAwd[,4], tbl.scholarshipCohorts[,4], tbl.GaCommit[,3])   #concatenate fundCode columns
+fundCode <- c(tbl.Cancels[,9], tbl.scholarshipAwd[,4], tbl.scholarshipCohorts[,4], tbl.GaCommitmentFundList.OSFA[,3])   #concatenate fundCode columns
 fundCode <- melt(fundCode)                                                                                     #stack columns on top of each other
 fundCode <- fundCode[,1]                                                                                        #extract the first column only
 fundCode <- as.data.table(fundCode)                                                                             #convert to a data.table
@@ -161,10 +160,8 @@ write.csv(studentID, "output/tbl_studentId.csv", row.names=F)
 #write.csv(tbl.balance, "output/tbl_balance.csv", row.names=F)
 write.csv(tbl.CohortAwd, "output/tbl_CohortAwd.csv", row.names=F)
 write.csv(tbl.fundBalance, "output/tbl_fundBalance.csv", row.names=F)
-write.csv(tbl.fundSummary, "output/tbl_fundSummary.csv", row.names=F)
 write.csv(tbl.GaCommit, "output/tbl_GaCommit.csv", row.names=F)
 write.csv(tbl.scholar, "output/tbl_scholar.csv", row.names=F)
-write.csv(df, "output/tbl_scholar2.csv", row.names=F)                                                                                       #output from the copy "year" column's value to the ensuing three columns process
 write.csv(tbl.studentBalance, "output/tbl_studentBalance.csv", row.names=F)
 
 #write output .xlsx files

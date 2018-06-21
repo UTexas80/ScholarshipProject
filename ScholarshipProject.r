@@ -1,2 +1,2 @@
-#Load the projectmutate
+#Load the project
 library("ProjectTemplate"); load.project()

@@ -14,7 +14,12 @@ chart.rangefundAmt <- tbl.fundSummary %>% mutate(cuts = cut(totBalRemain, c(-100
     group_by(cuts) %>% 
     summarize(n=n())
 #https://stackoverflow.com/questions/28190435/changing-factor-levels-with-dplyr-mutate
-#   mutate(Range=c("Less than $0","0-$100,000","$100,000-$200,000","$200,000-$300,000","$300,000-$400,000", "Greater than $400,000")
+chart.rangefundAmt <- chart.rangefundAmt %>% 
+                      mutate(cuts = factor(cuts, labels = c("$(100000-$000,000)", 
+                                                           "$000,000-$100,000", 
+                                                           "$100,000-$200,000",
+                                                           "$200,000-$300,000",
+                                                           "$300,000-$400,000")))
 
 write.csv(chart.GaCommitByUnit, "graphs/chart.GaCommitByUnit.csv", row.names=F)
 write.csv(chart.GaCommitByYear, "graphs/chart.GaCommitByYear.csv", row.names=F)
@@ -45,8 +50,6 @@ theme.chart_HIST <- theme.chart_BASIC +
                           theme(axis.title.x = element_text(hjust=0, vjust=-.5))
 
 # SMALL MULTIPLE THEME
-
-
 
 theme.chart_SMALLM <- theme.chart_BASIC +
                             theme(panel.grid.minor = element_blank()) +

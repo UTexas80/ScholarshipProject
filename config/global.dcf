@@ -7,10 +7,9 @@ data_loading_header: TRUE
 data_ignore:
 data_tables: TRUE
 load_libraries: TRUE
-libraries: caTools, chron, curl, DataExplorer, data.table, devtools, dplyr, filesstrings,
-             foreach, ggfortify, ggplot2, ggplotify, ggthemes, here, igraph, knitr, lintr,
+libraries: curl, data.table, devtools, DiagrammeR, dplyr, foreach, here, ggplot2, igraph, knitr, lintr,
              lubridate, mefa, modules, openxlsx, RDCOMClient, readxl, reshape, reshape2, rio, rJava,  
-             rprojroot, skimr, stats, stringr, styler, taRifx, tibble, tidyverse, tidyr, timetk, xlsx, zoo
+             rprojroot, reshape2, skimr, stats, stringr, styler, taRifx, tibble, tidyverse, tidyr, timetk, xlsx, zoo
 logging: TRUE
 logging_level: INFO
 munging: TRUE
