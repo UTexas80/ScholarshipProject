@@ -6,11 +6,11 @@ data_files <- file.info(Sys.glob("y:/Reports/Banner/Argos/Test/*.csv"))
 tbl.scholar<-read.csv(row.names(data_files)[which.max(data_files[["ctime"]])])                                                               #find the most recent version
 #import .csv file
 #tbl.scholar<-read.csv(row.names(data_files)[which.max(data_files[["ctime"]])], header=TRUE, sep=",", colClasses=c("Date", rep("character",2),"numeric","character", rep("numeric",8)))
-#tbl.scholar$spriden_id  <- as.character(tbl.scholar$spriden_id)                                                #convert spriden to character
-names(tbl.scholar)[2] <- "studentID"                                                                            #rename to studentID
-names(tbl.scholar)[5] <- "fundCode"                                                                             #rename to studentID
-#tbl.scholar$SYSDATE <- as.Date(as.character(tbl.scholar$SYSDATE), "%m/%d/%Y")                                  #convert SYSDATE to date only
-tbl.scholar[ is.na(tbl.scholar) ] <- 0                                                                          #replace na's with 0
+#tbl.scholar$spriden_id  <- as.character(tbl.scholar$spriden_id)                                    #convert spriden to character
+names(tbl.scholar)[2] <- "studentID"                                                                #rename to studentID
+names(tbl.scholar)[5] <- "fundCode"                                                                 #rename to studentID
+#tbl.scholar$SYSDATE <- as.Date(as.character(tbl.scholar$SYSDATE), "%m/%d/%Y")                      #convert SYSDATE to date only
+tbl.scholar[ is.na(tbl.scholar) ] <- 0                                                              #replace na's with 0
 
 # dup.DF(tbl.scholar, "cohort")
 
@@ -22,41 +22,48 @@ a<-as.character(rep(head(ay$V1,1),4))
 b<-head(paste0("ay_", ay$V2),4)
 
 tbl.scholar1 <- tbl.scholar
-tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("COHORT", ignore_case = TRUE) == currentAY, ay_1819=ay_1718, ay_1920=ay_1718, ay_2021=ay_1718)
-tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("COHORT", ignore_case = TRUE) == currentAY+101, ay_1920=ay_1819, ay_2021=ay_1819, ay_2122=ay_1819)
+names(tbl.scholar1) <- tolower(names(tbl.scholar))
+tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("cohort", ignore_case = TRUE) == currentAY, ay_1819=ay_1718, ay_1920=ay_1718, ay_2021=ay_1718)
+tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("cohort", ignore_case = TRUE) == currentAY+101, ay_1920=ay_1819, ay_2021=ay_1819, ay_2122=ay_1819)
+
 #tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", "ay_2324")
 #tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", "ay_2324")
 #tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", colNames)                              #20180606b
 
+
+
+
 #Dynamic Approach to propagate scholarship amount to the ensuing three years ####
 st_pos <- 6                                                                                         #concerned column's start position in the given dataframe
 df <- tbl.scholar                                                                                   #data backup
-tolower(names(df))                                                                            #change column names to lower case since don't know how input will be formatted
+names(df)<-tolower(names(df))                                                                       #change column names to lower case since don't know how input will be formatted
+
+#df<-df[c(1:6,15:27,7:14)]
 
 #rename concerned columns as "ay_1718", "ay_1819" etc
-names(df)[st_pos:ncol(df)] <- paste("AY", paste0(as.numeric(substr(min(df$cohort), 1, 2)) + 0:(ncol(df) - st_pos),
-                                                 as.numeric(substr(min(df$cohort), 3, 4)) + 0:(ncol(df) - st_pos)), 
-                                    sep="_")
+#names(df)[st_pos:ncol(df)-4] <- paste("AY", paste0(as.numeric(substr(min(df$cohort), 1, 2)) + 0:(ncol(df) - st_pos),
+#                                                 as.numeric(substr(min(df$cohort), 3, 4)) + 0:(ncol(df) - st_pos)), 
+#                                    sep="_")
 
 #copy "year" column's value to the ensuing three columns
-cols <- names(df)[st_pos:ncol(df)]                                                                  #renamed columns
+cols <- names(df)[st_pos:(ncol(df)-4)]                                                              #renamed columns (-4) is the number of extraneous columns at the end of the data frame
 mapply(function(x, y) 
-  df[df$cohort == x & df$studentID == y, which(grepl(x, cols)) + (st_pos-1):(st_pos+2)] <<- 
-    df[df$cohort == x & df$studentID == y, which(grepl(x, cols)) + (st_pos-1)],
-  df$cohort, df$studentID)
+  df[df$cohort == x & df$studentid == y, which(grepl(x, cols)) + (st_pos-1):(st_pos+2)] <<- 
+    df[df$cohort == x & df$studentid == y, which(grepl(x, cols)) + (st_pos-1)],
+  df$cohort, df$studentid)
 
 #End of Dynamic Approach ####
 
 #funcCode
 fundCode <- c(tbl.Cancels[,9], tbl.scholarshipAwd[,4], tbl.scholarshipCohorts[,4], tbl.GaCommit[,3])   #concatenate fundCode columns
-fundCode <- melt(fundCode)                                                                                     #stack columns on top of each other
-fundCode <- fundCode[,1]                                                                                        #extract the first column only
-fundCode <- as.data.table(fundCode)                                                                             #convert to a data.table
-fundCode <- subset(fundCode, fundCode!=0)                                                                       #remove rows containing zero
-fundCode <- unique(fundCode)                                                                                    #extract the unique values
-fundCode <- setorder(fundCode, fundCode)                                                                        #sort the fundCode column
+fundCode <- melt(fundCode)                                                                          #stack columns on top of each other
+fundCode <- fundCode[,1]                                                                            #extract the first column only
+fundCode <- as.data.table(fundCode)                                                                 #convert to a data.table
+fundCode <- subset(fundCode, fundCode!=0)                                                           #remove rows containing zero
+fundCode <- unique(fundCode)                                                                        #extract the unique values
+fundCode <- setorder(fundCode, fundCode)                                                            #sort the fundCode column
 fundCode <- fundCode %>% left_join(select(tbl.GaCommitmentFundList.OSFA, fundCode, fundName), by.x = "fundCode")
-fundCode$fundName[is.na(fundCode$fundName)] <- ""                                                               #replace na's with blanks in fund name
+fundCode$fundName[is.na(fundCode$fundName)] <- ""                                                   #replace na's with blanks in fund name
 
 #jctCode
 jctCode <- c(tbl.scholarshipCohorts[,4], tbl.scholarshipCohorts[,3])                                            #concatenate jctCode columns
