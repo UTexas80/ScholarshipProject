@@ -34,7 +34,7 @@ tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("cohort", ignore_case = TRUE) == 
 
 
 #Dynamic Approach to propagate scholarship amount to the ensuing three years ####
-st_pos <- 6                                                                                         #concerned column's start position in the given dataframe
+st_pos <- 7                                                                                         #concerned column's start position in the given dataframe
 df <- tbl.scholar                                                                                   #data backup
 names(df)<-tolower(names(df))                                                                       #change column names to lower case since don't know how input will be formatted
 
