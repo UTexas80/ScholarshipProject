@@ -7,8 +7,8 @@ tbl.scholar<-read.csv(row.names(data_files)[which.max(data_files[["ctime"]])])  
 #import .csv file
 #tbl.scholar<-read.csv(row.names(data_files)[which.max(data_files[["ctime"]])], header=TRUE, sep=",", colClasses=c("Date", rep("character",2),"numeric","character", rep("numeric",8)))
 #tbl.scholar$spriden_id  <- as.character(tbl.scholar$spriden_id)                                    #convert spriden to character
-names(tbl.scholar)[2] <- "studentID"                                                                #rename to studentID
-names(tbl.scholar)[5] <- "fundCode"                                                                 #rename to studentID
+names(tbl.scholar)[3] <- "studentID"                                                                #rename to studentID
+names(tbl.scholar)[6] <- "fundCode"                                                                 #rename to studentID
 #tbl.scholar$SYSDATE <- as.Date(as.character(tbl.scholar$SYSDATE), "%m/%d/%Y")                      #convert SYSDATE to date only
 tbl.scholar[ is.na(tbl.scholar) ] <- 0                                                              #replace na's with 0
 
@@ -30,7 +30,7 @@ tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("cohort", ignore_case = TRUE) == 
 #tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", "ay_2324")
 #tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", colNames)                              #20180606b
 
-
+jctCountyZip<-county.regions %>% inner_join(zip_codes, by = c("region" = "fips"))
 
 
 #Dynamic Approach to propagate scholarship amount to the ensuing three years ####
@@ -205,6 +205,9 @@ write.xlsx(as.data.frame(tbl.GaCommitmentFundList.OSFA), "output/tbl_scholarship
 write.xlsx(as.data.frame(tbl.studentBalance), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_studentBalance", append=TRUE)
 write.xlsx(as.data.frame(tbl.fundSummary), "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl.fundSummary", append=TRUE)
 
+
+names(tbl.scholar) <- tolower(names(tbl.scholar))
+names(tbl.scholar1) <- tolower(names(tbl.scholar1))
 write.xlsx(tbl.scholar, "output/tbl_scholar.xlsx", row.names=F, sheetName="tbl_scholar", append=FALSE)
 write.xlsx(tbl.scholar1, "output/tbl_scholar1.xlsx", row.names=F, sheetName="tbl_scholar1", append=FALSE)
 write.xlsx(df, "output/tbl_scholar2.xlsx", row.names=F, sheetName="tbl_scholar2", append=FALSE)

@@ -11,3 +11,8 @@ ay <- mutate_at(ay, vars(V3), funs(lead), n = 2)
 ay <- mutate_at(ay, vars(V4), funs(lead), n = 3)
 
 ay1 <- transpose(ay)
+data(county.fips)                                                                                                                           # choroplethrMaps package
+data(county.regions)                                                                                                                        # choroplethrMaps package
+data(counties)                                                                                                                              # noncensus package
+data(zip_codes)                                                                                                                             # noncensus package    
+data(zipcode)                                                                                                                               # zipcode package
