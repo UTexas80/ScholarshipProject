@@ -5,9 +5,9 @@
 # ga.f <- fortify(ga, region="NAME")
 
 map.GaCommitByZip<-data.table(df)  %>%
-    group_by(zip_code) %>%
+    group_by(zip) %>%
     summarise_at(vars(ay_1718:ay_1718), funs(n(), sum(., na.rm = TRUE))) %>%
-    arrange(zip_code)
+    arrange(zip)
 names(map.GaCommitByZip)[2:3] <- c("Number","TotalAmount")
 
 # start the plot

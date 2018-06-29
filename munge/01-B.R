@@ -7,8 +7,8 @@ tbl.scholar<-read.csv(row.names(data_files)[which.max(data_files[["ctime"]])])  
 #import .csv file
 #tbl.scholar<-read.csv(row.names(data_files)[which.max(data_files[["ctime"]])], header=TRUE, sep=",", colClasses=c("Date", rep("character",2),"numeric","character", rep("numeric",8)))
 #tbl.scholar$spriden_id  <- as.character(tbl.scholar$spriden_id)                                    #convert spriden to character
-names(tbl.scholar)[3] <- "studentID"                                                                #rename to studentID
-names(tbl.scholar)[6] <- "fundCode"                                                                 #rename to studentID
+names(tbl.scholar)[2] <- "studentID"                                                                #rename to studentID
+names(tbl.scholar)[5] <- "fundCode"                                                                 #rename to fundCode
 #tbl.scholar$SYSDATE <- as.Date(as.character(tbl.scholar$SYSDATE), "%m/%d/%Y")                      #convert SYSDATE to date only
 tbl.scholar[ is.na(tbl.scholar) ] <- 0                                                              #replace na's with 0
 
@@ -31,10 +31,8 @@ tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("cohort", ignore_case = TRUE) == 
 #tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", colNames)                              #20180606b
 
 
-
-
 #Dynamic Approach to propagate scholarship amount to the ensuing three years ####
-st_pos <- 7                                                                                         #concerned column's start position in the given dataframe
+st_pos <- 6                                                                                         #concerned column's start position in the given dataframe
 df <- tbl.scholar                                                                                   #data backup
 names(df)<-tolower(names(df))                                                                       #change column names to lower case since don't know how input will be formatted
 

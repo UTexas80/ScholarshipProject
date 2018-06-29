@@ -23,9 +23,9 @@ chart.rangefundAmt <- chart.rangefundAmt %>%
                                                            "$200,000-$300,000",
                                                            "$300,000-$400,000")))
 chart.GaCommitByZip<-data.table(df)  %>%
-    group_by(zip_code) %>%
+    group_by(zip) %>%
     summarise_at(vars(ay_1718:ay_1718), funs(n(), sum(., na.rm = TRUE))) %>%
-    arrange(zip_code)
+    arrange(zip)
 names(chart.GaCommitByZip)[1:3] <- c("zip", "Number","value")
   #names(df[2])<-'Total'
 chart.GaCommitByZip<-data.table(chart.GaCommitByZip)                                                                                        # convert chart to a data.table
