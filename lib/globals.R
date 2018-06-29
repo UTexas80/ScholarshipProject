@@ -1,5 +1,5 @@
 # https://cran.r-project.org/web/packages/ProjectTemplate/ProjectTemplate.pdf
-# Add any project specific configuration here.
+# Add any project specific configuration here.                                                      # http://projecttemplate.net/configuring.html ####
 # Access this information using config$...
 
 # currentYr <- as.numeric(format(Sys.Date(), format="%y"))
@@ -9,5 +9,5 @@
 
 
 add.config(
-
+st_pos = 7                                                                                          # #Dynamic Approach ->concerned column's start position in the given dataframe ####
 )

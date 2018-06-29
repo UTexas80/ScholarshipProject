@@ -30,7 +30,7 @@ tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("cohort", ignore_case = TRUE) == 
 #tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", "ay_2324")
 #tbl.scholar1<-dup.DF(tbl.scholar1, currentAY, 4, "ay_1718", colNames)                              #20180606b
 
-jctCountyZip<-county.regions %>% inner_join(zip_codes, by = c("region" = "fips"))
+
 
 
 #Dynamic Approach to propagate scholarship amount to the ensuing three years ####
@@ -51,7 +51,6 @@ mapply(function(x, y)
   df[df$cohort == x & df$studentid == y, which(grepl(x, cols)) + (st_pos-1):(st_pos+2)] <<- 
     df[df$cohort == x & df$studentid == y, which(grepl(x, cols)) + (st_pos-1)],
   df$cohort, df$studentid)
-
 #End of Dynamic Approach ####
 
 #funcCode
@@ -64,6 +63,9 @@ fundCode <- unique(fundCode)                                                    
 fundCode <- setorder(fundCode, fundCode)                                                            #sort the fundCode column
 fundCode <- fundCode %>% left_join(select(tbl.GaCommitmentFundList.OSFA, fundCode, fundName), by.x = "fundCode")
 fundCode$fundName[is.na(fundCode$fundName)] <- ""                                                   #replace na's with blanks in fund name
+
+#jctCountyByZip
+jctCountyZip<-county.regions %>% inner_join(zip_codes, by = c("region" = "fips"))
 
 #jctCode
 jctCode <- c(tbl.scholarshipCohorts[,4], tbl.scholarshipCohorts[,3])                                            #concatenate jctCode columns
@@ -149,14 +151,12 @@ tbl.studentBalance<-tbl.BannerCohorts %>%
 # Totals preprocessing script.
 tbl.fundSummary<-as.data.table(unique.data.frame(select(select(inner_join(tbl.fundBalance,jctCode, by='fundCode')%>%inner_join(., tbl.studentBalance, by='osfaCode'), -ends_with(".y")),osfaCode, fundCode:totBalFund, totBalStudent)%>%mutate(totBalRemain = totBalFund - totBalStudent)))
 
-
 #convert tables to data.tables
 fundCode<-data.table(fundCode)
 jctCode<-data.table(jctCode)
 tbl.CohortAwd<-data.table(tbl.CohortAwd)
 tbl.fundBalance<-data.table(tbl.fundBalance)
 tbl.GaCommit<-data.table(tbl.GaCommit)
-
 
 #write output .csv files
 write.csv(jctCode, "output/jct_Code.csv", row.names=F)
@@ -173,22 +173,6 @@ write.csv(tbl.GaCommit, "output/tbl_GaCommit.csv", row.names=F)
 write.csv(tbl.scholar, "output/tbl_scholar.csv", row.names=F)
 write.csv(df, "output/tbl_scholar2.csv", row.names=F)                                                                                       #output from the copy "year" column's value to the ensuing three columns process
 write.csv(tbl.studentBalance, "output/tbl_studentBalance.csv", row.names=F)
-
-#write output .xlsx files
-# write.xlsx(fundCode, "output/tbl_fundCode.xlsx", row.names=F, sheetName="tblFundCode", append=FALSE)
-# write.xlsx(jctCode, "output/tbl_jctCode.xlsx", row.names=F, sheetName="tbl_jctCode")
-# write.xlsx(jctCohortCode, "output/tbl_jctCohortCode.xlsx", row.names=F, sheetName="tbl_jctCohortCode")
-# write.xlsx(osfaCode, "output/tbl_osfaCode.xlsx", row.names=F, sheetName="tbl_osfaCode")
-# write.xlsx(studentID, "output/tbl_studentID.xlsx", row.names=F, sheetName="tbl_studentID")
-
-# write.xlsx(as.data.frame(tbl.balance), "output/tbl_balance.xlsx", row.names=F, sheetName="tbl_balance")
-# write.xlsx(as.data.frame(tbl.BannerCohorts), "output/tbl_bannerCohorts.xlsx", row.names=F, sheetName="tbl_bannerCohorts")
-# write.xlsx(as.data.frame(tbl.CohortAwd), "output/tbl_cohortAwd.xlsx", row.names=F, sheetName="tbl_cohortAwd")
-# write.xlsx(as.data.frame(tbl.fundBalance), "output/tbl_fundBalance.xlsx", row.names=F, sheetName="tbl_fundBalance")
-# write.xlsx(as.data.frame(tbl.GaCommit), "output/tbl_GaCommit.xlsx", row.names=F, sheetName="tbl_GaCommit")
-# write.xlsx(as.data.frame(tbl.GaCommitmentFundList.OSFA), "output/tbl_GaCommitFundList.xlsx", row.names=F, sheetName="tbl_GaCommitFundList")
-# write.xlsx(tbl.scholar, "output/tbl_scholar.xlsx", row.names=F, sheetName="tbl_scholar")
-# write.xlsx(as.data.frame(tbl.studentBalance), "output/tbl_studentBalance.xlsx", row.names=F, sheetName="tbl_studentBalance")
 
 write.xlsx(jctCode, "output/tbl_scholarships.xlsx", row.names=F, sheetName="tbl_jctCode", append=FALSE)
 write.xlsx(fundCode, "output/tbl_scholarships.xlsx", row.names=F, sheetName="tblFundCode", append=TRUE)
@@ -211,6 +195,22 @@ names(tbl.scholar1) <- tolower(names(tbl.scholar1))
 write.xlsx(tbl.scholar, "output/tbl_scholar.xlsx", row.names=F, sheetName="tbl_scholar", append=FALSE)
 write.xlsx(tbl.scholar1, "output/tbl_scholar1.xlsx", row.names=F, sheetName="tbl_scholar1", append=FALSE)
 write.xlsx(df, "output/tbl_scholar2.xlsx", row.names=F, sheetName="tbl_scholar2", append=FALSE)
+
+#write output .xlsx files
+# write.xlsx(fundCode, "output/tbl_fundCode.xlsx", row.names=F, sheetName="tblFundCode", append=FALSE)
+# write.xlsx(jctCode, "output/tbl_jctCode.xlsx", row.names=F, sheetName="tbl_jctCode")
+# write.xlsx(jctCohortCode, "output/tbl_jctCohortCode.xlsx", row.names=F, sheetName="tbl_jctCohortCode")
+# write.xlsx(osfaCode, "output/tbl_osfaCode.xlsx", row.names=F, sheetName="tbl_osfaCode")
+# write.xlsx(studentID, "output/tbl_studentID.xlsx", row.names=F, sheetName="tbl_studentID")
+
+# write.xlsx(as.data.frame(tbl.balance), "output/tbl_balance.xlsx", row.names=F, sheetName="tbl_balance")
+# write.xlsx(as.data.frame(tbl.BannerCohorts), "output/tbl_bannerCohorts.xlsx", row.names=F, sheetName="tbl_bannerCohorts")
+# write.xlsx(as.data.frame(tbl.CohortAwd), "output/tbl_cohortAwd.xlsx", row.names=F, sheetName="tbl_cohortAwd")
+# write.xlsx(as.data.frame(tbl.fundBalance), "output/tbl_fundBalance.xlsx", row.names=F, sheetName="tbl_fundBalance")
+# write.xlsx(as.data.frame(tbl.GaCommit), "output/tbl_GaCommit.xlsx", row.names=F, sheetName="tbl_GaCommit")
+# write.xlsx(as.data.frame(tbl.GaCommitmentFundList.OSFA), "output/tbl_GaCommitFundList.xlsx", row.names=F, sheetName="tbl_GaCommitFundList")
+# write.xlsx(tbl.scholar, "output/tbl_scholar.xlsx", row.names=F, sheetName="tbl_scholar")
+# write.xlsx(as.data.frame(tbl.studentBalance), "output/tbl_studentBalance.xlsx", row.names=F, sheetName="tbl_studentBalance")
 
 # RegEx
 # ([\sI])\w+
