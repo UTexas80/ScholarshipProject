@@ -32,7 +32,7 @@ tbl.scholar1<-tbl.scholar1%>%mutate_cond(fixed("cohort", ignore_case = TRUE) == 
 
 
 #Dynamic Approach to propagate scholarship amount to the ensuing three years ####
-st_pos <- 6                                                                                         #concerned column's start position in the given dataframe
+#st_pos <- 6                                                                                         #concerned column's start position in the given dataframe
 df <- tbl.scholar                                                                                   #data backup
 names(df)<-tolower(names(df))                                                                       #change column names to lower case since don't know how input will be formatted
 
@@ -190,9 +190,26 @@ write.xlsx(as.data.frame(tbl.fundSummary), "output/tbl_scholarships.xlsx", row.n
 
 names(tbl.scholar) <- tolower(names(tbl.scholar))
 names(tbl.scholar1) <- tolower(names(tbl.scholar1))
+
 write.xlsx(tbl.scholar, "output/tbl_scholar.xlsx", row.names=F, sheetName="tbl_scholar", append=FALSE)
 write.xlsx(tbl.scholar1, "output/tbl_scholar1.xlsx", row.names=F, sheetName="tbl_scholar1", append=FALSE)
 write.xlsx(df, "output/tbl_scholar2.xlsx", row.names=F, sheetName="tbl_scholar2", append=FALSE)
+
+tbl.scholar1<-split(tbl.scholar,tbl.scholar$cohort)
+lapply(names(tbl.scholar1),
+       function(x)write.xlsx(as.data.frame(tbl.scholar1[x]),
+                            file ="output/tbl_scholar.xlsx",
+                                row.names=F,
+                                    sheetName=x,
+                                        append=TRUE))
+
+tbl.scholar2<-split(df,df$cohort)
+lapply(names(tbl.scholar2),
+       function(x)write.xlsx(as.data.frame(tbl.scholar2[x]),
+                            file ="output/tbl_scholar2.xlsx",
+                                row.names=F,
+                                    sheetName=x,
+                                        append=TRUE))
 
 #write output .xlsx files
 # write.xlsx(fundCode, "output/tbl_fundCode.xlsx", row.names=F, sheetName="tblFundCode", append=FALSE)

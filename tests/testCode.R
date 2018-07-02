@@ -142,5 +142,23 @@ tbl.fundsByUnit<-left_join(tbl.BannerCohorts, jctCode, by='osfaCode') %>%
     left_join(., tbl.GaCommitmentFundList.OSFA, by='fundCode') 
 
 
+unique(df[,4])
+g<-data.table(df)  %>% group_by(cohort) %>% arrange(cohort)
+
+df%>%
+    group_by(cohort)%>%
+    nest()
+df2<-data.table(df)
+df1<-split(df2,df$cohort)
+lapply(names(df1),
+       function(x)write.csv(df1[x],
+                            file =paste0(x,'.csv')))
 
 
+
+df1<-split(df2,df$cohort)
+lapply(names(df1),
+       function(x)write.xlsx(as.data.frame(df1[x]),
+                            file ="output/scholar2.xlsx.xlsx",
+                            sheetName=x,
+                            append=TRUE))

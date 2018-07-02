@@ -33,7 +33,6 @@ chart.GaCommitByZip<-chart.GaCommitByZip[, zip:=as.character(zip)]              
 #names(chart.GaCommitByZip)[1] <- "zip"                                                                                                     # rename zip_code to zip
 # chart.GaCommitByZip<-inner_join(chart.GaCommitByZip, zipcode)                                                                             # merge zip code table with GaCommitByZip table
 
-
 chart.GaCommitByCounty<-chart.GaCommitByZip %>%
     left_join(jctCountyZip) %>%
     select(region,value) %>%
