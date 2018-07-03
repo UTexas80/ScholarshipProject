@@ -156,9 +156,20 @@ lapply(names(df1),
 
 
 
-df1<-split(df2,df$cohort)
-lapply(names(df1),
-       function(x)write.xlsx(as.data.frame(df1[x]),
-                            file ="output/scholar2.xlsx.xlsx",
+df1<-split(df,df$cohort)
+df%>%
+    group_by(cohort)%>%
+    nest()%>%
+    lapply(names(df),
+       function(x)write.xlsx(as.data.frame(df[x]),
+                            file ="output/scholar2.xlsx",
                             sheetName=x,
                             append=TRUE))
+
+3
+4
+ 
+tbl.scholar %>% 
+    select(cohort , degree)%>%
+    group_by(cohort)%>%
+    count(degree)

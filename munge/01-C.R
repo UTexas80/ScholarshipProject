@@ -40,6 +40,38 @@ chart.GaCommitByCounty<-chart.GaCommitByZip %>%
     arrange(region) %>%
     summarise(value = sum(value))
 
+chart.degreeByCohort<-data.table(tbl.scholar) %>%
+    mutate(cohort = as.character(cohort)) %>%
+    select(cohort, degree) %>%
+    group_by(cohort) %>%
+    count(degree)
+# From on a categorical column variable
+graph.degreeByCohort <- ggplot(chart.degreeByCohort, aes(degree))
+graph.degreeByCohort <- graph.degreeByCohort + theme_solarized(light = FALSE)
+graph.degreeByCohort <- graph.degreeByCohort + 
+    geom_bar(aes(weight=n, fill=cohort)) +
+    theme(plot.title = element_text(colour = "white", face="bold"),
+          plot.subtitle = element_text(colour = "white"),
+          axis.title.x = element_text(colour="SteelBlue1"),
+          axis.text.x = element_text(angle=65,  colour="green", vjust=0.6),
+          axis.title.y = element_text(colour="SteelBlue1"),
+          axis.text.y = element_text(colour="green")) +          
+    labs(title="Categorywise Degree by Cohort Chart", 
+        subtitle="Degree by Cohort", 
+        caption="Source: Degree from 'tbl.scholar' dataset")
+
+plot(graph.degreeByCohort)
+
+#TreeMap
+treemap(chart.degreeByCohort,                                                   #data frame object
+        index=c("cohort","degree"),                                             #list of categorical variables
+        vSize = "n",                                                            #quantitative variable
+        type="index",                                                           #Type sets the organization and color scheme of the treemap
+        palette = "Greens",                                                     #Select the color palette from the RColorBrewer presets or make your own.
+        title="Degree by Cohorts TreeMap",                                      #Customize the title
+        fontsize.title = 14                                                     #Change the font size of the title
+        )
+     
 # map<-get_map(location='united states', zoom=4, maptype = "terrain",
 #              source='google',color='color')
 
@@ -54,6 +86,7 @@ write.csv(chart.GaCommitByUnit, "graphs/chart.GaCommitByUnit.csv", row.names=F)
 write.csv(chart.GaCommitByYear, "graphs/chart.GaCommitByYear.csv", row.names=F)
 write.csv(chart.GaCommitByZip, "graphs/chart.GaCommitByZip.csv", row.names=F)
 write.csv(chart.rangefundAmt, "graphs/chart.rangefundAmt.csv", row.names=F)
+write.csv(chart.GaCommitByZip %>%left_join(jctCountyZip), "graphs/list.GaCommitByCount.csv", row.names=F)
 
 g<-ggplot(tbl.fundSummary, aes(fundCode, totBalRemain))+geom_point() + geom_smooth(method="lm")
 plot(g)
@@ -62,6 +95,15 @@ plot(g)
 #--------------
 # Create Theme
 #--------------
+# New Theme https://is.gd/HGplk6
+theme_new <- theme_bw() +
+  theme(plot.background = element_rect(size = 1, color = "blue", fill = "black"),
+        text=element_text(size = 12, family = "Serif", color = "ivory"),
+        axis.text.y = element_text(colour = "purple"),
+        axis.text.x = element_text(colour = "red"),
+        panel.background = element_rect(fill = "#420DAB"),
+        strip.background = element_rect(fill = muted("orange")))
+# p5 + theme_new        
 
 # BASIC THEME
 theme.chart_BASIC <- 
