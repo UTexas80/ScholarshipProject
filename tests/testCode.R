@@ -173,3 +173,23 @@ tbl.scholar %>%
     select(cohort , degree)%>%
     group_by(cohort)%>%
     count(degree)
+
+
+
+    chart.GaCommitByZip <- data.table(df) %>%
+    group_by(zip) %>%
+    rename(zip5=zip)
+
+lori_1819data <- 
+    lori_1819data %>% 
+    filter(str_detect(Recipient.Student.ID.., "^8"))
+
+    styler::style_file( "C:/Users/gfalk/Documents/ScholarshipProjectPackrat/R/ScholarshipProject/munge/01-C.R")
+    styler::style_file( "S:/ScholarshipsProject/R/ScholarshipProject/munge/01-C.R")
+
+tbl.scholar2$`1718`$studentid
+
+# https://stackoverflow.com/questions/21888910/how-to-specify-names-of-columns-for-x-and-y-when-joining-in-dplyr
+anti1718a<-anti_join(lori_1718data, tbl.scholar2[["1718"]], by = c("Recipient.Student.ID.." = "studentid"))
+anti1718b<-anti_join(tbl.scholar2[["1718"]],lori_1718data, by = c("studentid"="Recipient.Student.ID.."))
+anti1819<-anti_join(lori_1819data, tbl.scholar2[["1819"]], by = c("Recipient.Student.ID.." = "studentid"))

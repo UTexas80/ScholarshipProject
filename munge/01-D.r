@@ -5,7 +5,7 @@ xlApp <- COMCreate("Excel.Application")
 xlWbk <- xlApp$Workbooks()$Open("S:\\ScholarshipsProject\\R\\ScholarshipProject\\output\\scholarCompare.xlsm")
 
 # this line of code might be necessary if you want to see your spreadsheet:
-xlApp[['Visible']] <- FALSE 
+xlApp[["Visible"]] <- FALSE
 
 # Run the macro called "MyMacro":
 xlApp$Run("scholarDiff")

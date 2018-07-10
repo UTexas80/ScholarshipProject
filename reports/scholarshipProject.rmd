@@ -1,8 +1,1 @@
 `r opts_knit$set(root.dir='..')`                                                                    # Customising ProjectTemplate           https://wp.me/pMm6L-k2V
-
----
-title: "Scholarship Project"
-author: "Glen C. Falk
-date: "June 21, 2018"
-output: html_document
----
