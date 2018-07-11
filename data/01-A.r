@@ -17,8 +17,7 @@ data(counties) # noncensus package
 data(zip_codes) # noncensus package
 data(zipcode) # zipcode package
 
-
 jctCountyZip <- county.regions %>% inner_join(zip_codes, by = c("region" = "fips"))
 
-lori_1718data <- read.xlsx("O:/Departments/Scholarships/OSFA - Foundation and Trust Accounts/Foundation and Trust Accounts Awarded by OSFA/Georgia Commitment Scholarship/--FUNDING--/Commit to Georgia Campaign Requirements with Recipients.xlsx", 2, startRow = 2, header = TRUE)
-lori_1819data <- read.xlsx("O:/Departments/Scholarships/OSFA - Foundation and Trust Accounts/Foundation and Trust Accounts Awarded by OSFA/Georgia Commitment Scholarship/--FUNDING--/Commit to Georgia Campaign Requirements with Recipients.xlsx", 3, startRow = 2, header = TRUE)
+osfa_1718data <- read.xlsx("O:/Departments/Scholarships/OSFA - Foundation and Trust Accounts/Foundation and Trust Accounts Awarded by OSFA/Georgia Commitment Scholarship/--FUNDING--/Commit to Georgia Campaign Requirements with Recipients.xlsx", 2, startRow = 2, header = TRUE)
+osfa_1819data <- read.xlsx("O:/Departments/Scholarships/OSFA - Foundation and Trust Accounts/Foundation and Trust Accounts Awarded by OSFA/Georgia Commitment Scholarship/--FUNDING--/Commit to Georgia Campaign Requirements with Recipients.xlsx", 3, startRow = 2, header = TRUE)

@@ -193,3 +193,6 @@ tbl.scholar2$`1718`$studentid
 anti1718a<-anti_join(lori_1718data, tbl.scholar2[["1718"]], by = c("Recipient.Student.ID.." = "studentid"))
 anti1718b<-anti_join(tbl.scholar2[["1718"]],lori_1718data, by = c("studentid"="Recipient.Student.ID.."))
 anti1819<-anti_join(lori_1819data, tbl.scholar2[["1819"]], by = c("Recipient.Student.ID.." = "studentid"))
+
+common<-intersect(names(anti1718a), names(anti1718b))
+rbind(anti1718a[,common], anti1718b[,common])

@@ -87,14 +87,14 @@ jctCohortCode <- setorder(jctCohortCode, studentID) # sort the studentID column
 # jctCountyZip <- jctCountyZip[c(7,10:11,1:6,8:9)]                                                   #reorder
 
 # Lori's Scholoarship data
-lori_1718data<-lori_1718data[!is.na(lori_1718data$OSFA.Fund.Number),]
-lori_1718data <-                                                                                    #regex-student id starts with '8'
-    lori_1718data %>% 
+osfa_1718data <- osfa_1718data[!is.na(osfa_1718data$OSFA.Fund.Number), ]
+osfa_1718data <- # regex-student id starts with '8'
+  osfa_1718data %>%
     filter(str_detect(Recipient.Student.ID.., "^8"))
-#lori_1819data<-lori_1819data[!is.na(lori_1819data$Recipient.Student.ID..),]
-lori_1819data<-lori_1819data[!is.na(lori_1819data$OSFA.Fund.Number),]
-lori_1819data <-                                                                                    #student id starts with '8'
-    lori_1819data %>%
+# osfa_1819data<-osfa_1819data[!is.na(osfa_1819data$Recipient.Student.ID..),]
+osfa_1819data <- osfa_1819data[!is.na(osfa_1819data$OSFA.Fund.Number), ]
+osfa_1819data <- # student id starts with '8'
+  osfa_1819data %>%
     filter(str_detect(Recipient.Student.ID.., "^8")) %>%
     mutate(Recipient.Student.ID.. = as.character(Recipient.Student.ID..))
 
@@ -227,7 +227,7 @@ lapply(
     )
 )
 
-tbl.scholar2 <- split(df, df$cohort)  #separate the dataframe by cohort year
+tbl.scholar2 <- split(df, df$cohort) # separate the dataframe by cohort year
 lapply(
   names(tbl.scholar2),
   function(x) write.xlsx(as.data.frame(tbl.scholar2[x]),
@@ -238,22 +238,31 @@ lapply(
     )
 )
 
-tbl.scholar2_current_1<-unnest(tbl.scholar2[[as.character(currentAY+101)]]) %>%
-mutate(studentid = as.character(studentid))
+tbl.scholar2_current_1 <- unnest(tbl.scholar2[[as.character(currentAY + 101)]]) %>%
+  mutate(studentid = as.character(studentid))
 
-anti1718a<-
-  anti_join(lori_1718data, tbl.scholar2[["1718"]], by = c("Recipient.Student.ID.." = "studentid")) %>%  # find unmatched 
+anti1718a <-
+  anti_join(osfa_1718data, tbl.scholar2[["1718"]], by = c("Recipient.Student.ID.." = "studentid")) %>% # find unmatched
   rename_at("OSFA.Fund.Number", ~"fundcode") %>%
   rename_at("Recipient.Student.ID..", ~"studentid") %>%
-  unite(name, Last.Name, First.Name, sep=", ") %>%
-  mutate(cohort=currentAY)
+  unite(name, Last.Name, First.Name, sep = ", ") %>%
+  mutate(cohort = currentAY, origin="OSFA")
+anti1718b <- anti_join(tbl.scholar2[["1718"]], osfa_1718data, by = c("studentid" = "Recipient.Student.ID..")) %>% # find unmatched
+  mutate(origin = "System")
+anti1718c <- inner_join(anti1718a, anti1718b, by = "studentid") %>%
+  rename_at(
+    .vars = vars(ends_with(".x")),
+    .funs = funs(sub("[.]x$", "", .))
+  ) %>%
+  mutate(origin = "")
+common <- intersect(names(anti1718a), names(anti1718b)) # https://stackoverflow.com/questions/16674377/combine-two-dataframes-in-r-based-on-common-columns
+#anti1718 <- anti1718[c(4,2:3,1)] %>%  # reorder
+anti1718 <- rbind(anti1718a[, common], anti1718b[, common], anti1718c[, common]) %>%
+  select(4:5,2:3,1) %>%  # reorder
+  arrange(studentid)
 
-anti1718b<-anti_join(tbl.scholar2[["1718"]],lori_1718data, by = c("studentid"="Recipient.Student.ID.."))  # find unmatched
-
-anti1718<- inner_join(anti1718a, anti1718b, by = "studentid")
-
-anti1819a<-anti_join(lori_1819data, tbl.scholar2_current_1, by = c("Recipient.Student.ID.." = "studentid"))  # find unmatched 
-anti1819b<-anti_join(tbl.scholar2_current_1,lori_1819data, by = c("studentid"="Recipient.Student.ID.."))  # find unmatched
+anti1819a <- anti_join(osfa_1819data, tbl.scholar2_current_1, by = c("Recipient.Student.ID.." = "studentid")) # find unmatched
+anti1819b <- anti_join(tbl.scholar2_current_1, osfa_1819data, by = c("studentid" = "Recipient.Student.ID..")) # find unmatched
 
 write.xlsx(anti1718a, "output/anti1718.xlsx", row.names = F, sheetName = "tbl_anti1718a", append = FALSE)
 write.xlsx(anti1718b, "output/anti1718.xlsx", row.names = F, sheetName = "tbl_anti1718b", append = TRUE)

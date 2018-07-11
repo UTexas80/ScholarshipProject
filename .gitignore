@@ -1,2 +1,10 @@
+# excel #
+###################
+output/*.csv
+**/output/**/*.xlsx
+# packrat #
+###################
 packrat/lib*/
+# r #
+###################
 .Rproj.user
