@@ -1,2 +1,0 @@
-# Totals preprocessing script.
-tbl.fundSummary<-select(select(inner_join(tbl.fundBalance,jctCode, by='fundCode')%>%inner_join(., tbl.studentBalance, by='osfaCode'), -ends_with(".y")),osfaCode, fundCode:totBalFund, totBalStudent)%>%mutate(totBalRemain = totBalFund - totBalStudent)

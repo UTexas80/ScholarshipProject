@@ -8,7 +8,7 @@ chart.GaCommitByFund01 <-
   tbl.GaCommit %>%
   group_by(FY, osfaCode, AccountName) %>%
   select(FY, osfaCode, AccountName, Award) %>%
-  summarize(sum(Award))
+  summarise(sum(Award))
 chart.GaCommitByFund02 <-
   tbl.GaCommit[, sum(Award), by = list(FY, osfaCode, AccountName)]
 chart.GaCommitByFund02 <-
@@ -22,7 +22,7 @@ chart.GaCommitByUnit <- rename.columns(chart.GaCommitByUnit, list(V1 = "fundAmou
 chart.rangefundAmt <- tbl.fundSummary %>%
   mutate(cuts = cut(totBalRemain, c(-100000, 0, 100000, 200000, 300000, 400000, Inf))) %>%
   group_by(cuts) %>%
-  summarize(n = n())
+  summarise(n = n())
 # https://stackoverflow.com/questions/28190435/changing-factor-levels-with-dplyr-mutate
 chart.rangefundAmt <- chart.rangefundAmt %>%
   mutate(cuts = factor(cuts, labels = c(

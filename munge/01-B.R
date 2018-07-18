@@ -148,7 +148,7 @@ tbl.GaCommit <- tbl.CohortAwd %>%
 tbl.fundBalance <- tbl.GaCommitmentFundList.OSFA %>%
   group_by(fundCode, fundName) %>%
   select(fundCode, fundName, incomeBalance, principleBalance, invested.Balance) %>%
-  summarize(incBal = sum(incomeBalance), principleBal = sum(principleBalance), invBal = sum(invested.Balance)) %>%
+  summarise(incBal = sum(incomeBalance), principleBal = sum(principleBalance), invBal = sum(invested.Balance)) %>%
   mutate(totBalFund = incBal + principleBal + invBal) %>%
   arrange(fundCode, fundName)
 
@@ -161,7 +161,7 @@ tbl.BannerCohorts %>%
 tbl.studentBalance <- tbl.BannerCohorts %>%
   group_by(osfaCode) %>%
   select(osfaCode, AY_1718, AY_1819, AY_1920, AY_2021, AY_2122, AY_2223, AY_2324, AY_2425) %>%
-  summarize(totBalStudent = sum(AY_1718, AY_1819, AY_1920, AY_2021, AY_2122, AY_2223, AY_2324, AY_2425)) %>%
+  summarise(totBalStudent = sum(AY_1718, AY_1819, AY_1920, AY_2021, AY_2122, AY_2223, AY_2324, AY_2425)) %>%
   arrange(osfaCode)
 
 # tbl.balance<- inner_join(tbl.fundBalance, tbl.studentBalance, by = "osfaCode")
@@ -227,6 +227,9 @@ lapply(
     )
 )
 
+
+#write.xlsx(df$sheet1, file = "myfile.xlsx", sheetName="sh1", append=TRUE)
+
 tbl.scholar2 <- split(df, df$cohort) # separate the dataframe by cohort year
 lapply(
   names(tbl.scholar2),
@@ -241,6 +244,11 @@ lapply(
 tbl.scholar2_current_1 <- unnest(tbl.scholar2[[as.character(currentAY + 101)]]) %>%
   mutate(studentid = as.character(studentid))
 
+
+exception_list = replicate(n = 10,
+                     expr = {data.table(data.frame(matrix("", ncol = 5, nrow = 0)))},
+                     simplify = F)  
+
 anti1718a <-
   anti_join(osfa_1718data, tbl.scholar2[["1718"]], by = c("Recipient.Student.ID.." = "studentid")) %>% # find unmatched
   rename_at("OSFA.Fund.Number", ~"fundcode") %>%
@@ -251,8 +259,8 @@ anti1718b <- anti_join(tbl.scholar2[["1718"]], osfa_1718data, by = c("studentid"
   mutate(origin = "System")
 anti1718c <- inner_join(anti1718a, anti1718b, by = "studentid") %>%
   rename_at(
-    .vars = vars(ends_with(".x")),
-    .funs = funs(sub("[.]x$", "", .))
+    .vars = vars(ends_with(".x")), #  find all columns that end with .x to ""
+    .funs = funs(sub("[.]x$", "", .))   #  rename all columns that end with .x to ""
   ) %>%
   mutate(origin = "")
 common <- intersect(names(anti1718a), names(anti1718b)) # https://stackoverflow.com/questions/16674377/combine-two-dataframes-in-r-based-on-common-columns
@@ -268,6 +276,9 @@ write.xlsx(anti1718a, "output/anti1718.xlsx", row.names = F, sheetName = "tbl_an
 write.xlsx(anti1718b, "output/anti1718.xlsx", row.names = F, sheetName = "tbl_anti1718b", append = TRUE)
 write.xlsx(anti1819a, "output/anti1819.xlsx", row.names = F, sheetName = "tbl_anti1819a", append = FALSE)
 write.xlsx(anti1819b, "output/anti1819.xlsx", row.names = F, sheetName = "tbl_anti1819b", append = TRUE)
+
+
+
 # write output .xlsx files
 # write.xlsx(fundCode, "output/tbl_fundCode.xlsx", row.names=F, sheetName="tblFundCode", append=FALSE)
 # write.xlsx(jctCode, "output/tbl_jctCode.xlsx", row.names=F, sheetName="tbl_jctCode")

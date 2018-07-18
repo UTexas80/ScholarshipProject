@@ -195,4 +195,41 @@ anti1718b<-anti_join(tbl.scholar2[["1718"]],lori_1718data, by = c("studentid"="R
 anti1819<-anti_join(lori_1819data, tbl.scholar2[["1819"]], by = c("Recipient.Student.ID.." = "studentid"))
 
 common<-intersect(names(anti1718a), names(anti1718b))
-rbind(anti1718a[,common], anti1718b[,common])
+rbind(anti1718a[,common], anti1718b[,common])   # https://stackoverflow.com/questions/16674377/combine-two-dataframes-in-r-based-on-common-columns
+
+anti1718c %>% 
+  rename_at(.vars = vars(ends_with(".x")),
+            .funs = funs(sub("[.]x$", "", .)))
+
+
+# https://stackoverflow.com/questions/9917545/r-define-dimensions-of-empty-data-frame
+df2 <- data.table(data.frame(matrix("", ncol = 5, nrow = 0)))  # https://stackoverflow.com/questions/32712301/create-empty-data-frame-with-column-names-by-assigning-a-string-vector
+
+ab <- data.frame()  # create empty dataframe
+
+sim_list = replicate(n = 10,
+                     expr = {data.frame(x = rnorm(50), y = rnorm(50))},
+                     simplify = F)  # https://stackoverflow.com/questions/17499013/how-do-i-make-a-list-of-data-frames
+
+exception_list = replicate(n = 10,
+                     expr = {data.table(data.frame(matrix("", ncol = 5, nrow = 0)))},
+                     simplify = F)
+
+lapply(exception_list, function(x) {
+    x <- as.dataframe(x)
+})                     
+
+#split the exception list into individual data frames
+# https://stackoverflow.com/questions/30516325/converting-a-list-of-data-frames-into-individual-data-frames-in-r
+for (i in 1:length(exception_list)) {
+     assign(paste0("exception_list", i), as.data.frame(exception_list[[i]]))
+}
+
+lapply(names(exception_list), function(x) assign(x, paste0(exception_list[[x]]), as.data.table(exception_list[[i]]), envir = .GlobalEnv)
+lapply(names(exception_list), function(x) assign(x, as.data.frame(exception_list[[x]]), envir = .GlobalEnv)
+
+chart_test <-chart.GaCommitByZip %>%
+    inner_join(zip_codes) %>%
+    select(1, 3:9) %>%
+    group_by(zip) %>% 
+    summarise_at(vars(2:3), funs(n(), sum(., na.rm = TRUE)))
