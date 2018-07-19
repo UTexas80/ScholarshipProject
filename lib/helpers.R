@@ -88,7 +88,8 @@ dup.DF <- function(df1, currAY, colIdx, name1,name2) {
 # -df1[, col]0
 #  tbl.scholar1<-tbl.scholar1%>%mutate_cond(cohort == currentAY, ay_1819=ay_1718, ay_1920=ay_1718, ay_2021=ay_1718)
 }
- 
+
+#https://tinyurl.com/y8y8bs6l 
 cleanme <- function(dataname){
   
   #SAVE THE ORIGINAL FILE

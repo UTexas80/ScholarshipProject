@@ -231,5 +231,17 @@ lapply(names(exception_list), function(x) assign(x, as.data.frame(exception_list
 chart_test <-chart.GaCommitByZip %>%
     inner_join(zip_codes) %>%
     select(1, 3:9) %>%
-    group_by(zip) %>% 
-    summarise_at(vars(2:3), funs(n(), sum(., na.rm = TRUE)))
+    summarise(group_by(zip, city, latitude, longitude, fips), sum(n), sum(value))
+    
+chart_test <-chart.GaCommitByZip %>%
+    inner_join(zip_codes) %>%
+    select(1, 3:9) %>%
+    group_by(zip, city, latitude, longitude, fips) %>% 
+    summarise_each (funs(sum), n, value)
+
+us<-map_data('state')
+
+ggplot(chart_test,aes(longitude,latitude)) +
+  geom_polygon(data=us,aes(x=long,y=lat,group=group),color='gray',fill=NA,alpha=.35)+
+  geom_point(aes(color = count),size=.15,alpha=.25) +
+  xlim(-125,-65)+ylim(20,50)

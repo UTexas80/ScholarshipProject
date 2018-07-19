@@ -8,7 +8,7 @@ data_ignore:
 data_tables: TRUE
 load_libraries: TRUE
 libraries:   choroplethr, choroplethrMaps, curl, data.table, devtools, DiagrammeR, dplyr, foreach, here, ggmap, ggplot2, ggthemes, Hmisc, igraph, knitr, lintr,
-             lubridate, maps, mapdata, maptools, mefa, modules, noncensus, openxlsx, RDCOMClient, readxl, reshape, reshape2, rgdal, rio, rJava,  
+             lubridate, maps, mapdata, maptools, mapview, mefa, modules, noncensus, openxlsx, RDCOMClient, readxl, reshape, reshape2, rgdal, rio, rJava,  
              rprojroot, skimr, sp, stats, stringr, styler, taRifx, tibble, tidyverse, tidyr, timetk, treemap, treemapify, viridis, xlsx, zip, zipcode, zoo
 logging: TRUE
 logging_level: INFO
