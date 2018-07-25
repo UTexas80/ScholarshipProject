@@ -241,7 +241,59 @@ chart_test <-chart.GaCommitByZip %>%
 
 us<-map_data('state')
 
+
 ggplot(chart_test,aes(longitude,latitude)) +
   geom_polygon(data=us,aes(x=long,y=lat,group=group),color='gray',fill=NA,alpha=.35)+
-  geom_point(aes(color = count),size=.15,alpha=.25) +
+  geom_point(aes(color = n),size=.15,alpha=.25) +
   xlim(-125,-65)+ylim(20,50)
+
+cohort_by_zip<-  ggplot(chart_test,aes(longitude,latitude)) +
+  geom_polygon(data=ga_county,aes(x=long,y=lat,group=group),color='gray',fill=NA,alpha=.35)+
+  geom_point(aes(color = n),size=.15,alpha=.25) +
+  xlim(-125,-65)+ylim(20,50)
+
+
+#### Nhttps://tinyurl.com/yar88f96
+ga_base <- ggplot(data = ga_df, mapping = aes(x = long, y = lat, group = group)) + 
+  coord_fixed(1.3) + 
+  geom_polygon(color = "black", fill = "gray")
+ga_base + theme_nothing()
+
+ga_base + theme_nothing() + 
+  geom_polygon(data = ga_county, fill = NA, color = "white") +
+  geom_polygon(color = "black", fill = NA)  # get the state border back on top
+
+ga_base <- ggplot(data = ga_df, mapping = aes(x = long, y = lat, group = group)) + 
+  coord_fixed(1.3) + 
+  geom_polygon(color = "black", fill = "gray")
+
+map_ga_county<- ga_base + theme_nothing() + 
+  geom_polygon(data = ga_county, fill = NA, color = "white") +
+  geom_polygon(color = "black", fill = NA)  # get the state border back on top
+
+
+match(tbl.scholar2$`1718`$last_ay_eligible,ay$V1)
+match(xx$last_ay_eligible,ay$V1)
+as.integer(match(tbl.scholar2$`1718`$last_ay_eligible,ay$V1))
+match(tbl.scholar2$`1819`$last_ay_eligible,ay$V1)
+st_pos
+tbl.scholar2$`1718`$last_ay_eligible %in% ay$V1 # return true or false
+z<- filter(tbl.scholar2$`1718`, cohort==last_ay_eligible)
+
+'last_ay_eligible' match 'cohort'
+in that row update column (st_pos + match(tbl.scholar2$`1718`$last_ay_eligible,ay$V1) : (st_pos + match(tbl.scholar2$`1718`$last_ay_eligible,ay$V1)) + 2)
+
+# dplyr
+zz<- filter(tbl.scholar2$`1718`, cohort==last_ay_eligible)
+
+# data.table
+st_pos <- as.integer(st_pos)
+xxx <- as.list(tbl.scholar2$`1718`)
+xxxx<-data.table(map_df(xxx, ~.x))
+xxxxx<-as.data.table(xxxx[cohort ==  last_ay_eligible])
+xxxxxx<-xxxxx[, (st_pos + 1) : (st_pos + 3)  := 0]
+
+setDT(xxxxxx)[cohort ==  last_ay_eligible,(st_pos + 1) : (st_pos + 3):= 0]
+
+abc<-xxxxx[cohort ==  last_ay_eligible, (st_pos + 1) : (st_pos + 3)  := 0] # this is correct
+
