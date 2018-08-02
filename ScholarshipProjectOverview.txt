@@ -1,0 +1,9 @@
+Scheduled Argos query used extract Banner scholarship data which outputs .csv file
+Task scheduler job implements r program that utilizes the Project Template system to automate the data loading, preprocessing, munging, library importing and unit testing.
+The r procedure inputs the most recent .csv file with and joins it with several standalone excel files.
+r processes this data and outupts .xlsx, .csv and graphical plots of charts and maps. In addition, r initiates an excel macro that produces a color coded excpetion reports depicting the differences
+between datasets. Finally, the .csv files are uploaded to PowerBi to further enhance the reporting capabilities.
+
+
+
+Munging and preprocessing your data into a form that’s suitable for analysis.

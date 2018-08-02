@@ -230,7 +230,10 @@ lapply(
 
 #write.xlsx(df$sheet1, file = "myfile.xlsx", sheetName="sh1", append=TRUE)
 
-tbl.scholar2 <- split(df, df$cohort) # separate the dataframe by cohort year
+#tbl.scholar2 <- split(df, df$cohort) # separate the dataframe by cohort year
+tbl.scholar2<- split(df<-data.table(df)[df$cohort ==  df$last_ay_eligible, (st_pos + 1) : (st_pos + 3)  := 0], df$cohort) # zero out & separate the dataframe by cohort year
+
+
 lapply(
   names(tbl.scholar2),
   function(x) write.xlsx(as.data.frame(tbl.scholar2[x]),
@@ -242,7 +245,7 @@ lapply(
 )
 
 tbl.scholar2_current_1 <- unnest(tbl.scholar2[[as.character(currentAY + 101)]]) %>%
-  mutate(studentid = as.character(studentid))
+   mutate(studentid = as.character(studentid))
 
 
 exception_list = replicate(n = 10,

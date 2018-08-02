@@ -32,16 +32,19 @@ chart.rangefundAmt <- chart.rangefundAmt %>%
     "$200,000-$300,000",
     "$300,000-$400,000"
   )))
-chart.GaCommitByZip <-
+chart.GaCommitByZip <- 
   data.table(df) %>%
   group_by(zip) %>%
-  rename_at("zip", ~"zip5") %>% # rename zip to zip5
+  rename_at("zip",~"zip5") %>%                                                                      #rename zip to zip5
   summarise_at(vars(ay_1718:ay_1718), funs(n(), sum(., na.rm = TRUE))) %>%
-  mutate(zip = substr(zip5, 1, 5)) %>%
-  mutate_at(vars(starts_with("zip")), funs(as.character)) %>% # convert zip columns from integer to character
-  select(zip, zip5, n, sum) %>% # rearrange columns
-  rename_at("sum", ~"value") %>% # rename zip to zip5
+  mutate(zip=substr(zip5,1,5)) %>%
+  mutate_at(vars(starts_with("zip")),funs(as.character)) %>%                                        #convert zip columns from integer to character  
+  select(zip, zip5, n, sum) %>%                                                                     #rearrange columns  
+  rename_at("sum",~"value") %>%                                                                     #rename zip to zip5
   arrange(zip)
+
+
+
 
 # names(df[2])<-'Total'
 chart.GaCommitByZip <- data.table(chart.GaCommitByZip) # convert chart to a data.table
