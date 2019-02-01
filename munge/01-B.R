@@ -1,7 +1,7 @@
 # Example preprocessing script.
 # require(stats)
 
-# https://stackoverflow.com/questions/49016063/how-to-import-most-recent-csv-file-into-rstudio
+# https://tinyurl.com/ydgy9pfs
 data_files <- file.info(Sys.glob("y:/Reports/Banner/Argos/Test/*.csv"))
 tbl.scholar <- read.csv(row.names(data_files)[which.max(data_files[["ctime"]])]) # find the most recent version
 # import .csv file
@@ -272,13 +272,15 @@ anti1718 <- rbind(anti1718a[, common], anti1718b[, common], anti1718c[, common])
   select(4:5,2:3,1) %>%  # reorder
   arrange(studentid)
 
-anti1819a <- anti_join(osfa_1819data, tbl.scholar2_current_1, by = c("Recipient.Student.ID.." = "studentid")) # find unmatched
-anti1819b <- anti_join(tbl.scholar2_current_1, osfa_1819data, by = c("studentid" = "Recipient.Student.ID..")) # find unmatched
+# anti1819a <- anti_join(osfa_1819data, tbl.scholar2_current_1, by = c("Recipient.Student.ID.." = "studentid")) # find unmatched
+# anti1819b <- anti_join(tbl.scholar2_current_1, osfa_1819data, by = c("studentid" = "Recipient.Student.ID..")) # find unmatched
 
-write.xlsx(anti1718a, "output/anti1718.xlsx", row.names = F, sheetName = "tbl_anti1718a", append = FALSE)
-write.xlsx(anti1718b, "output/anti1718.xlsx", row.names = F, sheetName = "tbl_anti1718b", append = TRUE)
-write.xlsx(anti1819a, "output/anti1819.xlsx", row.names = F, sheetName = "tbl_anti1819a", append = FALSE)
-write.xlsx(anti1819b, "output/anti1819.xlsx", row.names = F, sheetName = "tbl_anti1819b", append = TRUE)
+# NEED TO DO A CHECK TO ENSURE THERE IS > 1 RECORD IN THE ANTI JOIN dataframes!!!!!
+
+# write.xlsx(anti1718a, "output/anti1718.xlsx", row.names = F, sheetName = "tbl_anti1718a", append = FALSE)
+# write.xlsx(anti1718b, "output/anti1718.xlsx", row.names = F, sheetName = "tbl_anti1718b", append = TRUE)
+# write.xlsx(anti1819a, "output/anti1819.xlsx", row.names = F, sheetName = "tbl_anti1819a", append = FALSE)
+# write.xlsx(anti1819b, "output/anti1819.xlsx", row.names = F, sheetName = "tbl_anti1819b", append = TRUE)
 
 
 
